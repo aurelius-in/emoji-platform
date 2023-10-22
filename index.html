@@ -41,8 +41,8 @@
     ];
 
     var enemies = [
-      { x: 210, y: 200, emoji: "😈" },
-      { x: 410, y: 400, emoji: "👹" },
+      { x: 210, y: 200, emoji: "🐒" },
+      { x: 410, y: 400, emoji: "🐈" },
       // Add more enemies as needed
     ];
 
@@ -51,9 +51,9 @@
 
       if (gameState === 'selectCharacter') {
         ctx.font = "100px Arial";
-        ctx.fillText("👦", 200, 300);
+        ctx.fillText("💃", 200, 300);
         ctx.fillText("or", 400, 300);
-        ctx.fillText("👧", 600, 300);
+        ctx.fillText("🕺", 600, 300);
       } else {
         // Draw player
         ctx.font = "48px Arial";
@@ -101,13 +101,13 @@
         if (touch.clientX >= 200 && touch.clientX <= 300 && touch.clientY >= 200 && touch.clientY <= 300) {
           ctx.strokeRect(190, 200, 120, 120);
           setTimeout(() => {
-            playerEmoji = '👦';
+            playerEmoji = '💃';
             gameState = 'play';
           }, 500);
         } else if (touch.clientX >= 600 && touch.clientX <= 700 && touch.clientY >= 200 && touch.clientY <= 300) {
           ctx.strokeRect(590, 200, 120, 120);
           setTimeout(() => {
-            playerEmoji = '👧';
+            playerEmoji = '🕺';
             gameState = 'play';
           }, 500);
         }
