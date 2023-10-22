@@ -24,20 +24,26 @@
 
     var player = {
       x: 50,
-      y: 50,
+      y: 500,
       width: 50,
       height: 50,
-      speed: 5,
       vy: 0,
-      gravity: 1,
-      jump: -15,
+      gravity: 0.5,
+      jump: -10,
       grounded: false
     };
 
     var platforms = [
+      { x: 0, y: 550, width: 800, height: 10 }, // Platform under player spawn
       { x: 200, y: 250, width: 100, height: 10 },
       { x: 400, y: 450, width: 100, height: 10 },
       // Add more platforms as needed
+    ];
+
+    var enemies = [
+      { x: 210, y: 200, emoji: "😈" },
+      { x: 410, y: 400, emoji: "👹" },
+      // Add more enemies as needed
     ];
 
     function draw() {
@@ -45,18 +51,24 @@
 
       if (gameState === 'selectCharacter') {
         ctx.font = "100px Arial";
-        ctx.fillText("👦", 300, 300);
+        ctx.fillText("👦", 200, 300);
         ctx.fillText("or", 400, 300);
-        ctx.fillText("👧", 500, 300);
+        ctx.fillText("👧", 600, 300);
       } else {
         // Draw player
         ctx.font = "48px Arial";
         ctx.fillText(playerEmoji, player.x, player.y);
 
         // Draw platforms
-        ctx.fillStyle = "#8B4513"; // Brown for bricks
+        ctx.fillStyle = "#8B4513";
         platforms.forEach(function(platform) {
           ctx.fillRect(platform.x, platform.y, platform.width, platform.height);
+        });
+
+        // Draw enemies
+        ctx.font = "48px Arial";
+        enemies.forEach(function(enemy) {
+          ctx.fillText(enemy.emoji, enemy.x, enemy.y);
         });
       }
     }
@@ -83,14 +95,21 @@
     }
 
     canvas.addEventListener("touchstart", function(e) {
+      e.preventDefault();
       var touch = e.touches[0];
       if (gameState === 'selectCharacter') {
-        if (touch.clientX >= 300 && touch.clientX <= 350 && touch.clientY >= 250 && touch.clientY <= 300) {
-          playerEmoji = '👦';
-          gameState = 'play';
-        } else if (touch.clientX >= 500 && touch.clientX <= 550 && touch.clientY >= 250 && touch.clientY <= 300) {
-          playerEmoji = '👧';
-          gameState = 'play';
+        if (touch.clientX >= 200 && touch.clientX <= 300 && touch.clientY >= 200 && touch.clientY <= 300) {
+          ctx.strokeRect(190, 200, 120, 120);
+          setTimeout(() => {
+            playerEmoji = '👦';
+            gameState = 'play';
+          }, 500);
+        } else if (touch.clientX >= 600 && touch.clientX <= 700 && touch.clientY >= 200 && touch.clientY <= 300) {
+          ctx.strokeRect(590, 200, 120, 120);
+          setTimeout(() => {
+            playerEmoji = '👧';
+            gameState = 'play';
+          }, 500);
         }
       } else {
         // Game touch logic for jumping
