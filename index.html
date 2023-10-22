@@ -54,17 +54,23 @@
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       if (gameState === 'selectCharacter') {
-        ctx.font = "300px Arial";  // Increased from 100px to 300px
+        ctx.font = "100px Arial";
         ctx.fillText("💃", 200, 300);
         ctx.fillText("or", 400, 300);
         ctx.fillText("🕺", 600, 300);
       } else {
         // Draw player
-        ctx.font = "144px Arial";  // Increased from 48px to 144px
+        ctx.font = "148px Arial";
         ctx.fillText(playerEmoji, player.x, player.y);
 
-        // Draw platforms and enemies
-        ctx.font = "144px Arial";  // Increased from 48px to 144px
+        // Draw platforms
+        ctx.fillStyle = "#8B4513";
+        platforms.forEach(function(platform) {
+          ctx.fillRect(platform.x, platform.y, platform.width, platform.height);
+        });
+
+        // Draw enemies
+        ctx.font = "148px Arial";
         enemies.forEach(function(enemy) {
           ctx.fillText(enemy.emoji, enemy.x, enemy.y);
         });
