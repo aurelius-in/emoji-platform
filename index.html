@@ -12,9 +12,13 @@
     }
   </style>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <script>
+    // Lock screen to landscape mode
+    screen.orientation.lock('landscape');
+  </script>
 </head>
 <body>
-  <canvas id="gameCanvas" width="800" height="600"></canvas>
+  <canvas id="gameCanvas" width="3200" height="1440"></canvas>
   <script>
     var canvas = document.getElementById("gameCanvas");
     var ctx = canvas.getContext("2d");
