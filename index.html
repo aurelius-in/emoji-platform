@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Emoji Platformer</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+    canvas {
+      border: 4px solid black;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="gameCanvas" width="800" height="600"></canvas>
+  <script>
+    var canvas = document.getElementById("gameCanvas");
+    var ctx = canvas.getContext("2d");
+
+    var playerEmoji = prompt("Choose your character: Type 'boy' for 👦 or 'girl' for 👧") === 'boy' ? '👦' : '👧';
+
+    var player = {
+      x: 50,
+      y: 50,
+      width: 50,
+      height: 50,
+      speed: 5,
+      emoji: playerEmoji
+    };
+
+    var badGuys = [
+      { x: 200, y: 200, emoji: "😈" },
+      { x: 400, y: 400, emoji: "👹" },
+      { x: 600, y: 300, emoji: "👺" },
+      { x: 700, y: 100, emoji: "👽" },
+      { x: 300, y: 100, emoji: "💩" },
+      { x: 500, y: 200, emoji: "👻" }
+    ];
+
+    var joystick = {
+      up: { x: 50, y: 500, emoji: "🔼" },
+      down: { x: 50, y: 550, emoji: "🔽" },
+      left: { x: 25, y: 525, emoji: "◀️" },
+      right: { x: 75, y: 525, emoji: "▶️" }
+    };
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Draw player
+      ctx.font = "48px Arial";
+      ctx.fillText(player.emoji, player.x, player.y);
+
+      // Draw bad guys
+      badGuys.forEach(function(badGuy) {
+        ctx.font = "48px Arial";
+        ctx.fillText(badGuy.emoji, badGuy.x, badGuy.y);
+      });
+
+      // Draw joystick
+      for (var dir in joystick) {
+        ctx.font = "48px Arial";
+        ctx.fillText(joystick[dir].emoji, joystick[dir].x, joystick[dir].y);
+      }
+    }
+
+    function update() {
+      // Update player position based on keyboard or touch input
+      if (keys["ArrowUp"] || touchDir === 'up') player.y -= player.speed;
+      if (keys["ArrowDown"] || touchDir === 'down') player.y += player.speed;
+      if (keys["ArrowLeft"] || touchDir === 'left') player.x -= player.speed;
+      if (keys["ArrowRight"] || touchDir === 'right') player.x += player.speed;
+    }
+
+    var keys = {};
+    var touchDir = null;
+
+    window.addEventListener("keydown", function(e) {
+      keys[e.key] = true;
+    });
+
+    window.addEventListener("keyup", function(e) {
+      keys[e.key] = false;
+    });
+
+    canvas.addEventListener("touchstart", function(e) {
+      var touch = e.touches[0];
+      for (var dir in joystick) {
+        if (Math.abs(touch.clientX - joystick[dir].x) < 25 && Math.abs(touch.clientY - joystick[dir].y) < 25) {
+          touchDir = dir;
+          break;
+        }
+      }
+    });
+
+    canvas.addEventListener("touchend", function(e) {
+      touchDir = null;
+    });
+
+    function gameLoop() {
+      update();
+      draw();
+      requestAnimationFrame(gameLoop);
+    }
+
+    gameLoop();
+  </script>
+</body>
+</html>
