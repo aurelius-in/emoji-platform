@@ -45,8 +45,8 @@
     ];
 
     var enemies = [
-      { x: 210, y: 200, emoji: "🐒" },
-      { x: 410, y: 400, emoji: "🐈" },
+      { x: 310, y: 100, emoji: "🐒" },
+      { x: 510, y: 150, emoji: "🐈" },
       // Add more enemies as needed
     ];
 
@@ -60,7 +60,7 @@
         ctx.fillText("🕺", 600, 300);
       } else {
         // Draw player
-        ctx.font = "148px Arial";
+        ctx.font = "200px Arial";
         ctx.fillText(playerEmoji, player.x, player.y);
 
         // Draw platforms
@@ -70,7 +70,7 @@
         });
 
         // Draw enemies
-        ctx.font = "148px Arial";
+        ctx.font = "75px Arial";
         enemies.forEach(function(enemy) {
           ctx.fillText(enemy.emoji, enemy.x, enemy.y);
         });
