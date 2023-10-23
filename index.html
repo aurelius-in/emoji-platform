@@ -52,11 +52,11 @@ var hugeAnimals = ["🐘", "🦒", "🦖", "🐙"];
     var y = 960;
     var x = 0;
 
-    function generatePlatform() {
-var platformWidth = (Math.floor(Math.random() * 101) + 400) * 2;  // Random width between 800 and 1000
+function generatePlatform() {
+  var platformWidth = (Math.floor(Math.random() * 101) + 400) * 2;  // Random width between 800 and 1000
   platforms.push({ x: x, y: y, width: platformWidth, height: 25 });
   var animal = allAnimals[animalIndex];
-  var animalSize = smallAnimals.includes(animal) ? 'small' : (bigAnimals.includes(animal) ? 'big' : 'huge');
+  var animalSize = tinyAnimals.includes(animal) ? 'tiny' : (smallAnimals.includes(animal) ? 'small' : (bigAnimals.includes(animal) ? 'big' : 'huge'));
   animals.push({ x: x + platformWidth / 2, y: y - 50, emoji: animal, size: animalSize });
   x += platformWidth + 75;  // 75px gap between platforms
   y += Math.random() < 0.5 ? 100 : -100;
@@ -65,6 +65,7 @@ var platformWidth = (Math.floor(Math.random() * 101) + 400) * 2;  // Random widt
   }
   animalIndex = (animalIndex + 1) % allAnimals.length;
 }
+
 
 for (var i = 0; i < 20; i++) {
   generatePlatform();
