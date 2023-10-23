@@ -118,8 +118,11 @@ function update() {
 
   // Move player forward only when jumping
   if (!player.grounded) {
-    player.x += 50;  // Move player forward when jumping
-    scrollX = player.x - canvas.width / 2;  // Update scrollX only when player jumps
+    const jumpDistance = 50;
+    player.x += jumpDistance;  // Move player forward when jumping
+    scrollX += jumpDistance;  // Update scrollX only when player jumps
+  } else {
+    scrollX = 0;  // Reset scrollX when player is grounded
   }
 }
 
