@@ -4,8 +4,8 @@
   <title>Emoji Platformer</title>
   <style>
     body {
-      margin: 0;
-      padding:0;
+      margin: 10;
+      padding: 10;
     }
     canvas {
       border: 4px grey;
@@ -68,17 +68,6 @@ for (var i = 0; i < 20; i++) {
   generatePlatform();
 }
 
-var animalSpeed = 1;
-
-function updateAnimals() {
-  animals.forEach(function(animal, index) {
-    var speed = Math.random() * 6 + 2; // Random speed between 2 and 8
-    if (animal.x <= platforms[index].x || animal.x >= platforms[index].x + platforms[index].width) {
-      animal.speed *= -1;
-    }
-    animal.x += animal.speed;
-  });
-}
 
     function drawPlayer() {
   ctx.save();
@@ -111,9 +100,6 @@ function drawAnimals() {
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Center the screen on the player
-  scrollX = player.x - canvas.width / 6;
-  
   if (gameState === 'selectCharacter') {
     ctx.font = "300px Arial";
     ctx.fillText("💃", 600, 700);
@@ -128,60 +114,58 @@ function draw() {
   }
 }
 
-function update() {
-  // Gravity
-  player.y += player.vy;
-  player.vy += player.gravity;
-  player.grounded = false;
+    function update() {
+      if (gameState !== 'selectCharacter') {
+        // Gravity
+        player.y += player.vy;
+        player.vy += player.gravity;
+        player.grounded = false;
 
-  // Collision with platforms
-  platforms.forEach(function(platform) {
-    if (player.x < platform.x + platform.width &&
-        player.x + player.width > platform.x &&
-        player.y < platform.y + platform.height &&
-        player.y + player.height > platform.y) {
-      player.y = platform.y - player.height;
-      player.vy = 0;
-      player.grounded = true;
-    }
-  });
+        // Collision with platforms
+        platforms.forEach(function(platform) {
+          if (player.x < platform.x + platform.width &&
+              player.x + player.width > platform.x &&
+              player.y < platform.y + platform.height &&
+              player.y + player.height > platform.y) {
+            player.y = platform.y - player.height;
+            player.vy = 0;
+            player.grounded = true;
+          }
+        });
 
-  // Move player forward only when jumping
-  if (!player.grounded) {
-    player.x += player.vx;
-    scrollX += 0;  // Set to zero to stop the screen from scrolling
-  }
-  
-  // Update animal positions
-  updateAnimals();
-}
+        // Move player forward only when jumping
+        if (!player.grounded) {
+          player.x += player.vx;
+          scrollX += player.vx;
+        }
+      }
+    }
 
-canvas.addEventListener("touchstart", function(e) {
-  e.preventDefault();
-  var touch = e.touches[0];
-  if (gameState === 'selectCharacter') {
-    if (touch.clientX >= 600 && touch.clientX <= 900 && touch.clientY >= 400 && touch.clientY <= 1000) {
-      ctx.strokeRect(590, 400, 310, 300);
-      setTimeout(() => {
-        playerEmoji = '💃';
-        gameState = 'play';
-      }, 500);
-    } else if (touch.clientX >= 1400 && touch.clientX <= 1700 && touch.clientY >= 400 && touch.clientY <= 1000) {
-      ctx.strokeRect(1390, 400, 310, 300);
-      setTimeout(() => {
-        playerEmoji = '🕺';
-        gameState = 'play';
-      }, 500);
-    }
-  } else {
-    // Game touch logic for hopping forward
-    if (player.grounded) {
-      player.vy = player.jump;
-      player.grounded = false;
-      player.x += 50;  // Move player forward when jumping
-    }
-  }
-});
+    canvas.addEventListener("touchstart", function(e) {
+      e.preventDefault();
+      var touch = e.touches[0];
+      if (gameState === 'selectCharacter') {
+        if (touch.clientX >= 600 && touch.clientX <= 900 && touch.clientY >= 400 && touch.clientY <= 1000) {
+          ctx.strokeRect(590, 400, 310, 300);
+          setTimeout(() => {
+            playerEmoji = '💃';
+            gameState = 'play';
+          }, 500);
+        } else if (touch.clientX >= 1400 && touch.clientX <= 1700 && touch.clientY >= 400 && touch.clientY <= 1000) {
+          ctx.strokeRect(1390, 400, 310, 300);
+          setTimeout(() => {
+            playerEmoji = '🕺';
+            gameState = 'play';
+          }, 500);
+        }
+      } else {
+        // Game touch logic for hopping forward
+        if (player.grounded) {
+          player.vy = player.jump;
+          player.grounded = false;
+        }
+      }
+    });
 
     function gameLoop() {
       update();
