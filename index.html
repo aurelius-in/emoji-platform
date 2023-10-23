@@ -149,7 +149,7 @@ function update() {
   // Move player forward only when jumping
   if (!player.grounded) {
     player.x += player.vx;
-    scrollX += player.vx;
+    scrollX += 0;  // Set to zero to stop the screen from scrolling
   }
   
   // Update animal positions
