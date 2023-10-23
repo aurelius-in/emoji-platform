@@ -118,13 +118,17 @@ function update() {
   });
 
   // Move player forward only when jumping
-  if (!player.grounded && jumped) {
+  if (!player.grounded) {
     const jumpDistance = 50;
-    player.x += jumpDistance;
-    scrollX += jumpDistance;
-    jumped = false;  // Reset the jumped flag
+    player.x += jumpDistance;  // Move player forward when jumping
+
+    // Update scrollX only when player crosses halfway point of canvas
+    if (player.x > canvas.width / 2) {
+      scrollX = player.x - canvas.width / 2;
+    }
   }
 }
+
 
 // Update the jumped flag when the player jumps
 function jump() {
