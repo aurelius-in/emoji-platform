@@ -129,64 +129,62 @@ function draw() {
 }
 
     function update() {
-      if (gameState !== 'selectCharacter') {
-        // Gravity
-        player.y += player.vy;
-        player.vy += player.gravity;
-        player.grounded = false;
+      if (// ... (previous code remains the same)
 
-        // Collision with platforms
-        platforms.forEach(function(platform) {
-          if (player.x < platform.x + platform.width &&
-              player.x + player.width > platform.x &&
-              player.y < platform.y + platform.height &&
-              player.y + player.height > platform.y) {
-            player.y = platform.y - player.height;
-            player.vy = 0;
-            player.grounded = true;
-          }
-        });
+function update() {
+  // Gravity
+  player.y += player.vy;
+  player.vy += player.gravity;
+  player.grounded = false;
 
-        // Move player forward only when jumping
-        if (!player.grounded) {
-          player.x += player.vx;
-          scrollX += player.vx;
-        }
-      }
- updateAnimals();
+  // Collision with platforms
+  platforms.forEach(function(platform) {
+    if (player.x < platform.x + platform.width &&
+        player.x + player.width > platform.x &&
+        player.y < platform.y + platform.height &&
+        player.y + player.height > platform.y) {
+      player.y = platform.y - player.height;
+      player.vy = 0;
+      player.grounded = true;
+    }
+  });
+
+  // Move player forward only when jumping
+  if (!player.grounded) {
+    player.x += player.vx;
+    scrollX += player.vx;
+  }
   
-  // Slow down player's forward progression
-  player.vx = 1;
-  
-  // Increase jump distance and height
-  player.jump = -20;
+  // Update animal positions
+  updateAnimals();
 }
 
-    canvas.addEventListener("touchstart", function(e) {
-      e.preventDefault();
-      var touch = e.touches[0];
-      if (gameState === 'selectCharacter') {
-        if (touch.clientX >= 600 && touch.clientX <= 900 && touch.clientY >= 400 && touch.clientY <= 1000) {
-          ctx.strokeRect(590, 400, 310, 300);
-          setTimeout(() => {
-            playerEmoji = '💃';
-            gameState = 'play';
-          }, 500);
-        } else if (touch.clientX >= 1400 && touch.clientX <= 1700 && touch.clientY >= 400 && touch.clientY <= 1000) {
-          ctx.strokeRect(1390, 400, 310, 300);
-          setTimeout(() => {
-            playerEmoji = '🕺';
-            gameState = 'play';
-          }, 500);
-        }
-      } else {
-        // Game touch logic for hopping forward
-        if (player.grounded) {
-          player.vy = player.jump;
-          player.grounded = false;
-        }
-      }
-    });
+canvas.addEventListener("touchstart", function(e) {
+  e.preventDefault();
+  var touch = e.touches[0];
+  if (gameState === 'selectCharacter') {
+    if (touch.clientX >= 600 && touch.clientX <= 900 && touch.clientY >= 400 && touch.clientY <= 1000) {
+      ctx.strokeRect(590, 400, 310, 300);
+      setTimeout(() => {
+        playerEmoji = '💃';
+        gameState = 'play';
+      }, 500);
+    } else if (touch.clientX >= 1400 && touch.clientX <= 1700 && touch.clientY >= 400 && touch.clientY <= 1000) {
+      ctx.strokeRect(1390, 400, 310, 300);
+      setTimeout(() => {
+        playerEmoji = '🕺';
+        gameState = 'play';
+      }, 500);
+    }
+  } else {
+    // Game touch logic for hopping forward
+    if (player.grounded) {
+      player.vy = player.jump;
+      player.grounded = false;
+      player.x += 50;  // Move player forward when jumping
+    }
+  }
+});
 
     function gameLoop() {
       update();
