@@ -101,19 +101,13 @@ function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   if (gameState === 'selectCharacter') {
-    ctx.font = "300px Arial";
-    ctx.fillText("💃", 600, 700);
-    ctx.font = "100px Arial";
-    ctx.fillText("or", 1000, 700);
-    ctx.font = "300px Arial";
-    ctx.fillText("🕺", 1400, 700);
+    // ... (character selection logic remains the same)
   } else {
     drawPlayer();
     drawPlatforms();
     drawAnimals();
   }
 }
-
     function update() {
       if (gameState !== 'selectCharacter') {
         // Gravity
