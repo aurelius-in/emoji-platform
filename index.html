@@ -72,10 +72,11 @@ var animalSpeed = 1;
 
 function updateAnimals() {
   animals.forEach(function(animal, index) {
+    var speed = Math.random() * 2 + 2; // Random speed between 2 and 4
     if (animal.x <= platforms[index].x || animal.x >= platforms[index].x + platforms[index].width) {
-      animalSpeed *= -1;
+      animal.speed *= -1;
     }
-    animal.x += animalSpeed;
+    animal.x += animal.speed;
   });
 }
     
@@ -110,6 +111,9 @@ function drawAnimals() {
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+    // Center the screen on the player
+  scrollX = player.x - canvas.width / 6;
+  
   if (gameState === 'selectCharacter') {
     ctx.font = "300px Arial";
     ctx.fillText("💃", 600, 700);
@@ -149,16 +153,15 @@ function draw() {
           scrollX += player.vx;
         }
       }
-    // Update animal positions
+ // Update animal positions
   updateAnimals();
   
   // Slow down player's forward progression
-  player.vx = 5;
+  player.vx = 1;
   
   // Increase jump distance and height
-  player.jump = -15;
+  player.jump = -20;
 }
-
 
     canvas.addEventListener("touchstart", function(e) {
       e.preventDefault();
