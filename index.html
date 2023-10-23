@@ -66,7 +66,6 @@ function generatePlatform() {
   animalIndex = (animalIndex + 1) % allAnimals.length;
 }
 
-
 for (var i = 0; i < 20; i++) {
   generatePlatform();
 }
@@ -82,23 +81,23 @@ for (var i = 0; i < 20; i++) {
         ctx.font = "300px Arial";
         ctx.fillText("🕺", 1400, 700);
       } else {
-        // Draw player
-        ctx.font = "144px Arial";
-        ctx.fillText(playerEmoji, player.x - scrollX, player.y);
+    // Draw platforms
+    ctx.fillStyle = "#8B4513";
+    platforms.forEach(function(platform) {
+      ctx.fillRect(platform.x - scrollX, platform.y, platform.width, platform.height);
+    });
 
-        // Draw platforms
-        ctx.fillStyle = "#8B4513";
-        platforms.forEach(function(platform) {
-          ctx.fillRect(platform.x - scrollX, platform.y, platform.width, platform.height);
-        });
+    // Draw animals
+    animals.forEach(function(animal) {
+      ctx.font = animal.size === 'tiny' ? "50px Arial" : (animal.size === 'small' ? "100px Arial" : (animal.size === 'big' ? "200px Arial" : "300px Arial"));
+      ctx.fillText(animal.emoji, animal.x - scrollX, animal.y);
+    });
 
-        // Draw animals
-        animals.forEach(function(animal) {
-          ctx.font = animal.size === 'small' ? "100px Arial" : (animal.size === 'big' ? "200px Arial" : "300px Arial");
-          ctx.fillText(animal.emoji, animal.x - scrollX, animal.y);
-        });
-      }
-    }
+    // Draw player
+    ctx.font = "144px Arial";
+    ctx.fillText(playerEmoji, player.x - scrollX, player.y);
+  }
+}
 
   let jumped = false;  // Add this variable at the top of your script
 
