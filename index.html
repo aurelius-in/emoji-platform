@@ -149,9 +149,7 @@ function update() {
   // Move player forward only when jumping
   if (!player.grounded) {
     player.x += 100;  // Increase this value to make the player jump further forward
-    scrollX = player.x - canvas.width / 2;  // Update screen position only when player jumps
-  } else {
-    scrollX = player.x - canvas.width / 2;  // Keep the screen centered on the player when not jumping
+    scrollX -= 100;  // Move the screen back to match the player's forward movement
   }
   
   // Update animal positions
