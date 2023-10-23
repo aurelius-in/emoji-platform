@@ -54,14 +54,13 @@
 
     function draw() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      if (gameState === 'selectCharacter') {
+  if (gameState === 'selectCharacter') {
   ctx.font = "300px Arial";
-  ctx.fillText("💃", 600, 700);  // Moved to the right and down
-  ctx.font = "100px Arial";  // Smaller font for "or"
-  ctx.fillText("or", 1000, 700);  // Moved to the right and down
+  ctx.fillText("💃", 600, 700);  // Use actual emoji
+  ctx.font = "100px Arial";
+  ctx.fillText("or", 1000, 700);
   ctx.font = "300px Arial";
-  ctx.fillText("🕺", 1400, 700);  // Moved to the right and down
-}
+  ctx.fillText("🕺", 1400, 700);  // Use actual emoji
       } else {
         // Draw player
         ctx.font = "144px Arial";
