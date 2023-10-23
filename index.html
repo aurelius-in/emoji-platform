@@ -149,11 +149,13 @@ function update() {
   // Move player forward only when jumping
   if (!player.grounded) {
     player.x += 100;  // Increase this value to make the player jump further forward
+    scrollX = player.x - canvas.width / 2;  // Update screen position only when player jumps
   }
   
   // Update animal positions
   updateAnimals();
 }
+
 
 
 canvas.addEventListener("touchstart", function(e) {
