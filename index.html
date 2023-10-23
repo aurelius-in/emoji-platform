@@ -104,7 +104,7 @@ function drawPlatforms() {
 function drawAnimals() {
   animals.forEach(function(animal) {
     ctx.font = animal.size === 'small' ? "100px Arial" : (animal.size === 'big' ? "200px Arial" : "300px Arial");
-    ctx.fillText(animal.emoji, animal.x - scrollX, animal.y + 25);
+    ctx.fillText(animal.emoji, animal.x - scrollX, animal.y - 25);
   });
 }
 
@@ -148,8 +148,8 @@ function update() {
 
   // Move player forward only when jumping
   if (!player.grounded) {
-    player.x += 100;  // Increase this value to make the player jump further forward
-    scrollX -= 100;  // Move the screen back to match the player's forward movement
+    player.x += 50;  // Increase this value to make the player jump further forward
+    scrollX -= 50;  // Move the screen back to match the player's forward movement
   }
   
   // Update animal positions
