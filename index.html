@@ -29,7 +29,7 @@
 
     var player = {
       x: 50,
-      y: 960,  // Start at the bottom of the screen
+      y: 960,
       width: 50,
       height: 50,
       vx: 10,
@@ -42,25 +42,30 @@
     var smallAnimals = ["🐈", "🐒", "🐕", "🦂", "🦔"];
     var bigAnimals = ["🦍", "🦘", "🦓", "🐖", "🐃", "🐂", "🦏"];
     var hugeAnimals = ["🐘", "🦒"];
+    var allAnimals = smallAnimals.concat(bigAnimals, hugeAnimals);
+    var animalIndex = 0;
     var animals = [];
 
-    // Generate random platforms and animals in the bottom 2/3 of the screen
     var platforms = [];
-    var y = 960;  // Start at the bottom of the screen
+    var y = 960;
     var x = 0;
-    for (var i = 0; i < 20; i++) {
-      var platformWidth = Math.floor(Math.random() * 451) + 50;  // Random width between 50 and 500
-      platforms.push({ x: x, y: y, width: platformWidth, height: 25 });  // 25px thickness
-      var animalSize = Math.random() < 0.33 ? 'small' : (Math.random() < 0.5 ? 'big' : 'huge');
-      var animalEmoji = animalSize === 'small' ? smallAnimals[Math.floor(Math.random() * smallAnimals.length)] :
-                        animalSize === 'big' ? bigAnimals[Math.floor(Math.random() * bigAnimals.length)] :
-                        hugeAnimals[Math.floor(Math.random() * hugeAnimals.length)];
-      animals.push({ x: x + platformWidth / 2, y: y - 50, emoji: animalEmoji, size: animalSize });
-      x += platformWidth + 50;  // 50px gap between platforms
-      y -= Math.floor(Math.random() * 100) + 50;  // Random vertical position
-      if (y < canvas.height * 1 / 3) {  // Limit to bottom 2/3 of the screen
+
+    function generatePlatform() {
+      var platformWidth = 100;
+      platforms.push({ x: x, y: y, width: platformWidth, height: 25 });
+      var animal = allAnimals[animalIndex];
+      var animalSize = smallAnimals.includes(animal) ? 'small' : (bigAnimals.includes(animal) ? 'big' : 'huge');
+      animals.push({ x: x + 50, y: y - 50, emoji: animal, size: animalSize });
+      x += platformWidth + 50;
+      y += Math.random() < 0.5 ? 100 : -100;
+      if (y < canvas.height * 1 / 3) {
         y = canvas.height * 1 / 3;
       }
+      animalIndex = (animalIndex + 1) % allAnimals.length;
+    }
+
+    for (var i = 0; i < 20; i++) {
+      generatePlatform();
     }
 
     function draw() {
