@@ -99,31 +99,29 @@ for (var i = 0; i < 20; i++) {
     }
 
     function update() {
-      if (gameState !== 'selectCharacter') {
-        // Gravity
-        player.y += player.vy;
-        player.vy += player.gravity;
-        player.grounded = false;
+  // Gravity
+  player.y += player.vy;
+  player.vy += player.gravity;
+  player.grounded = false;
 
-        // Collision with platforms
-        platforms.forEach(function(platform) {
-          if (player.x < platform.x + platform.width &&
-              player.x + player.width > platform.x &&
-              player.y < platform.y + platform.height &&
-              player.y + player.height > platform.y) {
-            player.y = platform.y - player.height;
-            player.vy = 0;
-            player.grounded = true;
-          }
-        });
-
-        // Move player forward only when jumping
-        if (!player.grounded) {
-          player.x += player.vx;
-          scrollX += player.vx;
-        }
-      }
+  // Collision with platforms
+  platforms.forEach(function(platform) {
+    if (player.x < platform.x + platform.width &&
+        player.x + player.width > platform.x &&
+        player.y < platform.y + platform.height &&
+        player.y + player.height > platform.y) {
+      player.y = platform.y - player.height;
+      player.vy = 0;
+      player.grounded = true;
     }
+  });
+
+  // Move player forward only when jumping
+  if (!player.grounded) {
+    player.x += player.vx;
+    scrollX += player.vx;  // Update scrollX only when player jumps
+  }
+}
 
     canvas.addEventListener("touchstart", function(e) {
       e.preventDefault();
