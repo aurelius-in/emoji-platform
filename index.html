@@ -32,19 +32,22 @@
       y: 500,
       width: 50,
       height: 50,
-      vx: 5,
+      vx: 10,
       vy: 0,
       gravity: 0.5,
       jump: -10,
       grounded: false
     };
 
-    var platforms = [
-      { x: 0, y: 550, width: 800, height: 10 },
-      { x: 200, y: 450, width: 100, height: 10 },
-      { x: 400, y: 350, width: 100, height: 10 },
-      // Add more platforms as steps
-    ];
+    // Generate random platforms
+    var platforms = [];
+    var y = 550;
+    var x = 0;
+    for (var i = 0; i < 20; i++) {
+      platforms.push({ x: x, y: y, width: 100, height: 10 });
+      x += Math.floor(Math.random() * 150) + 150;
+      y += (i < 10 ? -1 : 1) * 100;
+    }
 
     var enemies = [
       { x: 210, y: 400, emoji: "🐒" },
@@ -54,13 +57,14 @@
 
     function draw() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-  if (gameState === 'selectCharacter') {
-  ctx.font = "300px Arial";
-  ctx.fillText("💃", 600, 700);  // Use actual emoji
-  ctx.font = "100px Arial";
-  ctx.fillText("or", 1000, 700);
-  ctx.font = "300px Arial";
-  ctx.fillText("🕺", 1400, 700);  // Use actual emoji
+
+      if (gameState === 'selectCharacter') {
+        ctx.font = "300px Arial";
+        ctx.fillText("💃", 600, 700);
+        ctx.font = "100px Arial";
+        ctx.fillText("or", 1000, 700);
+        ctx.font = "300px Arial";
+        ctx.fillText("🕺", 1400, 700);
       } else {
         // Draw player
         ctx.font = "144px Arial";
@@ -99,8 +103,8 @@
           }
         });
 
-        // Move player forward
-        if (player.grounded) {
+        // Move player forward only when jumping
+        if (!player.grounded) {
           player.x += player.vx;
           scrollX += player.vx;
         }
@@ -108,30 +112,30 @@
     }
 
     canvas.addEventListener("touchstart", function(e) {
-  e.preventDefault();
-  var touch = e.touches[0];
-  if (gameState === 'selectCharacter') {
-    if (touch.clientX >= 600 && touch.clientX <= 900 && touch.clientY >= 400 && touch.clientY <= 1000) {
-      ctx.strokeRect(590, 400, 310, 300);
-      setTimeout(() => {
-        playerEmoji = '💃';
-        gameState = 'play';
-      }, 500);
-    } else if (touch.clientX >= 1400 && touch.clientX <= 1700 && touch.clientY >= 400 && touch.clientY <= 1000) {
-      ctx.strokeRect(1390, 400, 310, 300);
-      setTimeout(() => {
-        playerEmoji = '🕺';
-        gameState = 'play';
-      }, 500);
-    }
-  } else {
-    // Game touch logic for hopping forward
-    if (player.grounded) {
-      player.vy = player.jump;
-      player.grounded = false;
-    }
-  }
-});
+      e.preventDefault();
+      var touch = e.touches[0];
+      if (gameState === 'selectCharacter') {
+        if (touch.clientX >= 600 && touch.clientX <= 900 && touch.clientY >= 400 && touch.clientY <= 1000) {
+          ctx.strokeRect(590, 400, 310, 300);
+          setTimeout(() => {
+            playerEmoji = '💃';
+            gameState = 'play';
+          }, 500);
+        } else if (touch.clientX >= 1400 && touch.clientX <= 1700 && touch.clientY >= 400 && touch.clientY <= 1000) {
+          ctx.strokeRect(1390, 400, 310, 300);
+          setTimeout(() => {
+            playerEmoji = '🕺';
+            gameState = 'play';
+          }, 500);
+        }
+      } else {
+        // Game touch logic for hopping forward
+        if (player.grounded) {
+          player.vy = player.jump;
+          player.grounded = false;
+        }
+      }
+    });
 
     function gameLoop() {
       update();
