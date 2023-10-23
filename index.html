@@ -104,7 +104,7 @@ function drawPlatforms() {
 function drawAnimals() {
   animals.forEach(function(animal) {
     ctx.font = animal.size === 'small' ? "100px Arial" : (animal.size === 'big' ? "200px Arial" : "300px Arial");
-    ctx.fillText(animal.emoji, animal.x - scrollX, animal.y - 25);
+    ctx.fillText(animal.emoji, animal.x - scrollX, animal.y + 25);
   });
 }
 
@@ -148,49 +148,14 @@ function update() {
 
   // Move player forward only when jumping
   if (!player.grounded) {
-    player.x += 50;  // Increase this value to make the player jump further forward
-    scrollX -= 50;  // Move the screen back to match the player's forward movement
+    player.x += player.vx;
+    scrollX += player.vx;
   }
   
   // Update animal positions
   updateAnimals();
 }
 
-canvas.addEventListener("click", function(e) {
-  if (gameState === 'selectCharacter') {
-    if (e.clientX >= 600 && e.clientX <= 900 && e.clientY >= 400 && e.clientY <= 1000) {
-      ctx.strokeRect(590, 400, 310, 300);
-      setTimeout(() => {
-        playerEmoji = '💃';
-        gameState = 'play';
-      }, 500);
-    } else if (e.clientX >= 1400 && e.clientX <= 1700 && e.clientY >= 400 && e.clientY <= 1000) {
-      ctx.strokeRect(1390, 400, 310, 300);
-      setTimeout(() => {
-        playerEmoji = '🕺';
-        gameState = 'play';
-      }, 500);
-    }
-  } else {
-    // Game click logic for hopping forward
-    if (player.grounded) {
-      player.vy = player.jump;
-      player.grounded = false;
-      player.x += 50;  // Move player forward when jumping
-    }
-  }
-});
-
- document.addEventListener("keydown", function(e) {
-  if (e.code === "Space") {
-    if (player.grounded) {
-      player.vy = player.jump;
-      player.grounded = false;
-      player.x += 50;  // Move player forward when jumping
-    }
-  }
-});   
-    
 canvas.addEventListener("touchstart", function(e) {
   e.preventDefault();
   var touch = e.touches[0];
