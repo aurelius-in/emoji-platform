@@ -68,7 +68,6 @@ for (var i = 0; i < 20; i++) {
   generatePlatform();
 }
 
-
     function draw() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -98,6 +97,8 @@ for (var i = 0; i < 20; i++) {
       }
     }
 
+  let jumped = false;  // Add this variable at the top of your script
+
 function update() {
   // Gravity
   player.y += player.vy;
@@ -117,12 +118,20 @@ function update() {
   });
 
   // Move player forward only when jumping
-  if (!player.grounded) {
+  if (!player.grounded && jumped) {
     const jumpDistance = 50;
-    player.x += jumpDistance;  // Move player forward when jumping
-    scrollX += jumpDistance;  // Update scrollX only when player jumps
-  } else {
-    scrollX = 0;  // Reset scrollX when player is grounded
+    player.x += jumpDistance;
+    scrollX += jumpDistance;
+    jumped = false;  // Reset the jumped flag
+  }
+}
+
+// Update the jumped flag when the player jumps
+function jump() {
+  if (player.grounded) {
+    player.vy = player.jump;
+    player.grounded = false;
+    jumped = true;
   }
 }
 
