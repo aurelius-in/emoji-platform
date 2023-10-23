@@ -51,7 +51,7 @@
     var x = 0;
 
     function generatePlatform() {
-  var platformWidth = Math.floor(Math.random() * 101) + 400;  // Random width between 400 and 500
+var platformWidth = (Math.floor(Math.random() * 101) + 400) * 2;  // Random width between 800 and 1000
   platforms.push({ x: x, y: y, width: platformWidth, height: 25 });
   var animal = allAnimals[animalIndex];
   var animalSize = smallAnimals.includes(animal) ? 'small' : (bigAnimals.includes(animal) ? 'big' : 'huge');
