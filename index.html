@@ -68,7 +68,17 @@ for (var i = 0; i < 20; i++) {
   generatePlatform();
 }
 
+var animalSpeed = 1;
 
+function updateAnimals() {
+  animals.forEach(function(animal, index) {
+    if (animal.x <= platforms[index].x || animal.x >= platforms[index].x + platforms[index].width) {
+      animalSpeed *= -1;
+    }
+    animal.x += animalSpeed;
+  });
+}
+    
     function drawPlayer() {
   ctx.save();
   if (playerEmoji === '💃' || playerEmoji === '🕺') {
@@ -139,7 +149,16 @@ function draw() {
           scrollX += player.vx;
         }
       }
-    }
+    // Update animal positions
+  updateAnimals();
+  
+  // Slow down player's forward progression
+  player.vx = 5;
+  
+  // Increase jump distance and height
+  player.jump = -15;
+}
+
 
     canvas.addEventListener("touchstart", function(e) {
       e.preventDefault();
