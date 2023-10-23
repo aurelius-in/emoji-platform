@@ -72,14 +72,14 @@ var animalSpeed = 1;
 
 function updateAnimals() {
   animals.forEach(function(animal, index) {
-    var speed = Math.random() * 2 + 2; // Random speed between 2 and 4
+    var speed = Math.random() * 6 + 2; // Random speed between 2 and 8
     if (animal.x <= platforms[index].x || animal.x >= platforms[index].x + platforms[index].width) {
       animal.speed *= -1;
     }
     animal.x += animal.speed;
   });
 }
-    
+
     function drawPlayer() {
   ctx.save();
   if (playerEmoji === '💃' || playerEmoji === '🕺') {
@@ -153,8 +153,7 @@ function draw() {
           scrollX += player.vx;
         }
       }
- // Update animal positions
-  updateAnimals();
+ updateAnimals();
   
   // Slow down player's forward progression
   player.vx = 1;
