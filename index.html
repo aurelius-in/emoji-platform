@@ -156,6 +156,41 @@ function update() {
   updateAnimals();
 }
 
+canvas.addEventListener("click", function(e) {
+  if (gameState === 'selectCharacter') {
+    if (e.clientX >= 600 && e.clientX <= 900 && e.clientY >= 400 && e.clientY <= 1000) {
+      ctx.strokeRect(590, 400, 310, 300);
+      setTimeout(() => {
+        playerEmoji = '💃';
+        gameState = 'play';
+      }, 500);
+    } else if (e.clientX >= 1400 && e.clientX <= 1700 && e.clientY >= 400 && e.clientY <= 1000) {
+      ctx.strokeRect(1390, 400, 310, 300);
+      setTimeout(() => {
+        playerEmoji = '🕺';
+        gameState = 'play';
+      }, 500);
+    }
+  } else {
+    // Game click logic for hopping forward
+    if (player.grounded) {
+      player.vy = player.jump;
+      player.grounded = false;
+      player.x += 50;  // Move player forward when jumping
+    }
+  }
+});
+
+ document.addEventListener("keydown", function(e) {
+  if (e.code === "Space") {
+    if (player.grounded) {
+      player.vy = player.jump;
+      player.grounded = false;
+      player.x += 50;  // Move player forward when jumping
+    }
+  }
+});   
+    
 canvas.addEventListener("touchstart", function(e) {
   e.preventDefault();
   var touch = e.touches[0];
