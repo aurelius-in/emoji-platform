@@ -120,7 +120,7 @@ for (var i = 0; i < 20; i++) {
         // Move player forward only when jumping
         if (!player.grounded) {
           player.x += (player.vx * 1.5);
-          scrollX += (player.vx * 0.5);
+          scrollX = player.x;
         }
       }
     }
