@@ -136,6 +136,17 @@ function update() {
     // Center the screen on the player
     scrollX = player.x - canvas.width / 2;
   }
+// Check if the player is close to the right edge of the screen
+  if (player.x - scrollX > canvas.width - 200) {
+    generatePlatform('right');
+  }
+
+  // Check if the player is close to the left edge of the screen
+  if (player.x - scrollX < 200) {
+    generatePlatform('left');
+  }
+}
+  
 }
 
 
