@@ -77,8 +77,9 @@ for (var i = 0; i < 20; i++) {
   generatePlatform();
 }
 
-
-    function draw() {
+function draw() {
+  // Draw the background image
+  ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       if (gameState === 'selectCharacter') {
