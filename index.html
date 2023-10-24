@@ -59,18 +59,32 @@
       jumping: false
     };
     
-    function generatePlatform() {
-var platformWidth = (Math.floor(Math.random() * 101) + 400) * 2;  // Random width between 800 and 1000
-  platforms.push({ x: x, y: y, width: platformWidth, height: 25 });
-  var animal = allAnimals[animalIndex];
+    function generatePlatform(direction) {
+  var platformWidth = Math.floor(Math.random() * 101) + 400;  // Random width between 400 and 500
+  var newPlatform = {
+    x: direction === 'right' ? x : x - platformWidth - 75,
+    y: y,
+    width: platformWidth,
+    height: 25
+  };
+  platforms.push(newPlatform);
+
+  // Generate a random animal
+  var animal = allAnimals[Math.floor(Math.random() * allAnimals.length)];
   var animalSize = smallAnimals.includes(animal) ? 'small' : (bigAnimals.includes(animal) ? 'big' : 'huge');
-  animals.push({ x: x + platformWidth / 2, y: y - 50, emoji: animal, size: animalSize });
-  x += platformWidth + 75;  // 75px gap between platforms
+  animals.push({
+    x: newPlatform.x + platformWidth / 2,
+    y: newPlatform.y - 50,
+    emoji: animal,
+    size: animalSize
+  });
+
+  // Update x and y for the next platform
+  x = direction === 'right' ? x + platformWidth + 75 : x - platformWidth - 75;
   y += Math.random() < 0.5 ? 100 : -100;
   if (y < canvas.height * 1 / 3) {
     y = canvas.height * 1 / 3;
   }
-  animalIndex = (animalIndex + 1) % allAnimals.length;
 }
 
 for (var i = 0; i < 20; i++) {
