@@ -131,10 +131,13 @@ function update() {
     // Move player forward only when jumping
     if (player.jumping) {
       player.x += 30;  // Increase this for further jumps
-      scrollX += 0;  // Set this to 0 to stop automatic scrolling
     }
+
+    // Center the screen on the player
+    scrollX = player.x - canvas.width / 2;
   }
 }
+
 
 canvas.addEventListener("touchstart", function(e) {
   e.preventDefault();
