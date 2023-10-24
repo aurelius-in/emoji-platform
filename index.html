@@ -85,6 +85,11 @@ for (var i = 0; i < 20; i++) {
         ctx.font = "300px Arial";
         ctx.fillText("🕺", 1400, 700);
       } else {
+
+        // Draw player
+        ctx.font = "144px Arial";
+        ctx.fillText(playerEmoji, player.x - scrollX, player.y);
+        
     // Draw platforms
     ctx.fillStyle = "#8B4513";
     platforms.forEach(function(platform) {
