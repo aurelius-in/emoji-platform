@@ -18,7 +18,7 @@
   </script>
 </head>
 <body>
-  <canvas id="gameCanvas" width="3000" height="1200"></canvas>
+  <canvas id="gameCanvas" width="3200" height="1440"></canvas>
   <script>
     var canvas = document.getElementById("gameCanvas");
     var ctx = canvas.getContext("2d");
@@ -68,6 +68,7 @@ for (var i = 0; i < 20; i++) {
   generatePlatform();
 }
 
+
     function draw() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -97,50 +98,33 @@ for (var i = 0; i < 20; i++) {
       }
     }
 
-  let jumped = false;  // Add this variable at the top of your script
+    function update() {
+      if (gameState !== 'selectCharacter') {
+        // Gravity
+        player.y += player.vy;
+        player.vy += player.gravity;
+        player.grounded = false;
 
-function update() {
-  // Gravity
-  player.y += player.vy;
-  player.vy += player.gravity;
-  player.grounded = false;
+        // Collision with platforms
+        platforms.forEach(function(platform) {
+          if (player.x < platform.x + platform.width &&
+              player.x + player.width > platform.x &&
+              player.y < platform.y + platform.height &&
+              player.y + player.height > platform.y) {
+            player.y = platform.y - player.height;
+            player.vy = 0;
+            player.grounded = true;
+          }
+        });
 
-  // Collision with platforms
-  platforms.forEach(function(platform) {
-    if (player.x < platform.x + platform.width &&
-        player.x + player.width > platform.x &&
-        player.y < platform.y + platform.height &&
-        player.y + player.height > platform.y) {
-      player.y = platform.y - player.height;
-      player.vy = 0;
-      player.grounded = true;
+        // Move player forward only when jumping
+        if (!player.grounded) {
+          player.x += player.vx;
+          scrollX += player.vx;
+        }
+      }
     }
-  });
 
-  // Move player forward only when jumping
-if (!player.grounded) {
-  const jumpDistance = 50;
-  player.x += jumpDistance;  // Move player forward when jumping
-
-  // Update scrollX only when player crosses halfway point of canvas and is jumping
-  if (player.x > canvas.width / 2) {
-    scrollX = player.x - canvas.width / 2;
-  }
-} else {
-  // Reset scrollX to zero when the player is not jumping
-  scrollX = 0;
-}
-
-// Update the jumped flag when the player jumps
-function jump() {
-  if (player.grounded) {
-    player.vy = player.jump;
-    player.grounded = false;
-    jumped = true;
-  }
-}
-
-    
     canvas.addEventListener("touchstart", function(e) {
       e.preventDefault();
       var touch = e.touches[0];
