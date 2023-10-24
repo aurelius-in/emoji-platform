@@ -145,14 +145,22 @@ canvas.addEventListener("touchstart", function(e) {
       }, 500);
     }
   } else {
-    // Game touch logic for hopping forward
+    // Game touch logic for hopping forward or backward
     if (player.grounded) {
       player.vy = player.jump;
       player.grounded = false;
       player.jumping = true;  // Set jumping flag when player jumps
+
+      // Determine direction based on tap position
+      if (touch.clientX > canvas.width / 2) {
+        player.vx = 10;  // Jump right
+      } else {
+        player.vx = -10;  // Jump left
+      }
     }
   }
 });
+
 
 
     function gameLoop() {
