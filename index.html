@@ -162,11 +162,11 @@ canvas.addEventListener("touchstart", function(e) {
   e.preventDefault();
   var touch = e.touches[0];
   if (gameState === 'selectCharacter') {
-    if (touch.pageX >= 600 && touch.pageX <= 900 && touch.pageY >= 400 && touch.pageY <= 700) {
-      playerEmoji = "\ud83d\udc83"; // 💃
+    if (touch.clientX >= 600 && touch.clientX <= 900 && touch.clientY >= 400 && touch.clientY <= 700) {
+      playerEmoji = "💃";
       gameState = 'play';
-    } else if (touch.pageX >= 1400 && touch.pageX <= 1700 && touch.pageY >= 400 && touch.pageY <= 700) {
-      playerEmoji = "\ud83d\udd7a"; // 🕺
+    } else if (touch.clientX >= 1400 && touch.clientX <= 1700 && touch.clientY >= 400 && touch.clientY <= 700) {
+      playerEmoji = "🕺";
       gameState = 'play';
     }
   } else {
