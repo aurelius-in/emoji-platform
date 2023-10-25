@@ -18,6 +18,51 @@
     let gameState = 'selectCharacter', playerEmoji = null, scrollX = 0;
     let player = { x: 50, y: 960, width: 50, height: 50, vx: 10, vy: 0, gravity: 0.5, jump: -10, grounded: false, jumping: false };
     let platforms = [], animals = [];
+    let touchStartX, touchStartY, touchEndX, touchEndY;
+
+canvas.addEventListener("touchstart", function(e) {
+  e.preventDefault();
+  const touch = e.touches[0];
+  touchStartX = touch.clientX;
+  touchStartY = touch.clientY;
+
+  if (gameState === 'selectCharacter') {
+    if (touch.clientX >= 600 && touch.clientX <= 900 && touch.clientY >= 400 && touch.clientY <= 700) {
+      playerEmoji = "👨‍🦽";
+      gameState = 'play';
+    } else if (touch.clientX >= 1400 && touch.clientX <= 1700 && touch.clientY >= 400 && touch.clientY <= 700) {
+      playerEmoji = "👩‍🦽";
+      gameState = 'play';
+    }
+  }
+});
+
+canvas.addEventListener("touchend", function(e) {
+  e.preventDefault();
+  const touch = e.changedTouches[0];
+  touchEndX = touch.clientX;
+  touchEndY = touch.clientY;
+
+  const deltaX = touchEndX - touchStartX;
+  const deltaY = touchEndY - touchStartY;
+
+  if (gameState !== 'selectCharacter') {
+    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+      if (deltaX > 0) {
+        player.x += 50;
+      } else {
+        player.x -= 50;
+      }
+    } else {
+      if (deltaY < 0 && player.grounded) {
+        player.vy = player.jump;
+        player.grounded = false;
+        player.jumping = true;
+      }
+    }
+  }
+});
+
 
 // Manually set the first platform to be under the player
 platforms.push({ x: 0, y: 960, width: 500, height: 25 });
@@ -60,11 +105,11 @@ player.y = platforms[0].y - player.height;
 
     const drawCharacterSelection = () => {
       ctx.font = "300px Arial";
-      ctx.fillText("💃", 600, 700);
+      ctx.fillText("👩‍🦽", 600, 700);
       ctx.font = "100px Arial";
       ctx.fillText("or", 1000, 700);
       ctx.font = "300px Arial";
-      ctx.fillText("🕺", 1400, 700);
+      ctx.fillText("👨‍🦽", 1400, 700);
     };
 
     const drawGame = () => {
@@ -95,27 +140,7 @@ player.y = platforms[0].y - player.height;
         scrollX = player.x - canvas.width / 2;
       }
     };
-
-    canvas.addEventListener("touchstart", e => {
-      e.preventDefault();
-      const touch = e.touches[0];
-      if (gameState === 'selectCharacter') {
-        if (touch.clientX >= 600 && touch.clientX <= 900 && touch.clientY >= 400 && touch.clientY <= 700) {
-          playerEmoji = "💃";
-          gameState = 'play';
-        } else if (touch.clientX >= 1400 && touch.clientX <= 1700 && touch.clientY >= 400 && touch.clientY <= 700) {
-          playerEmoji = "🕺";
-          gameState = 'play';
-        }
-      } else {
-        if (player.grounded) {
-          player.vy = player.jump;
-          player.grounded = false;
-          player.jumping = true;
-        }
-      }
-    });
-
+    
     const gameLoop = () => {
       update();
       draw();
