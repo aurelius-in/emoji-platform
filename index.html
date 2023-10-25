@@ -91,10 +91,16 @@ for (var i = 0; i < 20; i++) {
   generatePlatform();
 }
 
+// Lock screen to landscape mode
+window.addEventListener("DOMContentLoaded", (event) => {
+  screen.orientation.lock('landscape');
+});
+
 function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);  // Clear the canvas first
   // Draw the background image
   ctx.drawImage(backgroundImage, 0, 0, backgroundImage.width, backgroundImage.height, 0, 0, canvas.width, canvas.height);
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
 
       if (gameState === 'selectCharacter') {
         ctx.font = "300px Arial";
