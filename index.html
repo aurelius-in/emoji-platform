@@ -19,6 +19,12 @@
     let player = { x: 50, y: 960, width: 50, height: 50, vx: 10, vy: 0, gravity: 0.5, jump: -10, grounded: false, jumping: false };
     let platforms = [], animals = [];
 
+// Manually set the first platform to be under the player
+platforms.push({ x: 0, y: 960, width: 500, height: 25 });
+
+// Initialize player's y-coordinate to be on the first platform
+player.y = platforms[0].y - player.height;
+
     const tinyAnimals = ["🐞", "🐛", "🦗", "🐜", "🐌"];
     const smallAnimals = ["🐈", "🐒", "🐕", "🦂", "🦔", "🦨", "🐢", "🦆", "🦤", "🐦", "🐓", "🐈‍⬛", "🐩", "🦫", "🦢"];
     const bigAnimals = ["🦍", "🦘", "🦓", "🐖", "🐃", "🐂", "🦏", "🦣", "🐐", "🐪", "🐫", "🐆", "🐅"];
