@@ -44,7 +44,7 @@
     var x = 0;
 
     function generatePlatform() {
-      var platformWidth = Math.floor(Math.random() * 101) + 500;  // Random width between 500 and 600
+      var platformWidth = Math.floor(Math.random() * 101) + 600;  // Random width between 500 and 600
       var newPlatform = {
         x: x,
         y: y,
@@ -103,12 +103,11 @@
         if (player.jumping) {
           player.x += 15;
         }
-
         scrollX = player.x - canvas.width / 2;
       }
     }
 
-    canvas.addEventListener("touchstart", function(e) {
+canvas.addEventListener("touchstart", function(e) {
   e.preventDefault();
   var touch = e.touches[0];
   if (gameState === 'selectCharacter') {
@@ -127,7 +126,6 @@
     }
   }
 });
-
 
     function gameLoop() {
       update();
