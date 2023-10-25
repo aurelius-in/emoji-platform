@@ -81,8 +81,6 @@ for (var i = 1; i <= 4; i++) {
     height: 25
   });
 }
-
-    
     
     function generatePlatform(direction) {
   var platformWidth = Math.floor(Math.random() * 101) + 400;  // Random width between 400 and 500
@@ -122,12 +120,13 @@ window.addEventListener("DOMContentLoaded", (event) => {
 });
 
 function draw() {
-  // Calculate the scaled width while maintaining the aspect ratio
-  var scaledWidth = canvas.height * 6;
+  // Clear the screen
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   // Draw the background image
+  var scaledWidth = canvas.height * 6;
   ctx.drawImage(backgroundImage, 0, 0, backgroundImage.width, backgroundImage.height, -scrollX, 0, scaledWidth, canvas.height);
-
+  
       if (gameState === 'selectCharacter') {
         ctx.font = "300px Arial";
         ctx.fillText("💃", 600, 700);
