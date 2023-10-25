@@ -142,15 +142,17 @@
     // Restore the context to its original state
     ctx.restore();
 
-    // Draw hills and other elements
+       // Draw rounded hills
     ctx.beginPath();
-    hills.forEach((hill, index) => {
-      if (index === 0) {
-        ctx.moveTo(hill.x - scrollX, hill.y);
-      } else {
-        ctx.lineTo(hill.x - scrollX, hill.y);
-      }
-    });
+    ctx.moveTo(hills[0].x - scrollX, hills[0].y);
+    for (let i = 1; i < hills.length; i++) {
+      const prevHill = hills[i - 1];
+      const hill = hills[i];
+      const midX = (prevHill.x + hill.x) / 2 - scrollX;
+      const midY = (prevHill.y + hill.y) / 2;
+      ctx.quadraticCurveTo(prevHill.x - scrollX, prevHill.y, midX, midY);
+    }
+    ctx.lineTo(hills[hills.length - 1].x - scrollX, hills[hills.length - 1].y);
     ctx.lineTo(canvas.width, canvas.height);
     ctx.lineTo(0, canvas.height);
     ctx.closePath();
@@ -219,7 +221,6 @@ const update = () => {
     scrollX = player.x - canvas.width / 2;
   }
 };
-
 
     const gameLoop = () => {
       update();
