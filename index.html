@@ -3,186 +3,118 @@
 <head>
   <title>Emoji Platformer</title>
   <style>
-    body {
-      margin: 0;
-      padding: 0;
-    }
-    canvas {
-      border: 4px solid black;
-    }
+    body { margin: 0; padding: 0; }
+    canvas { border: 4px solid black; }
   </style>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 </head>
 <body>
   <canvas id="gameCanvas" width="3200" height="1440"></canvas>
   <script>
-    // Lock screen to landscape mode
     screen.orientation.lock('landscape');
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
 
-    var canvas = document.getElementById("gameCanvas");
-    var ctx = canvas.getContext("2d");
+    let gameState = 'selectCharacter', playerEmoji = null, scrollX = 0;
+    let player = { x: 50, y: 960, width: 50, height: 50, vx: 10, vy: 0, gravity: 0.5, jump: -10, grounded: false, jumping: false };
+    let platforms = [], animals = [];
 
-    var gameState = 'selectCharacter';
-    var playerEmoji = null;
-    var scrollX = 0;
+    const tinyAnimals = ["🐞", "🐛", "🦗", "🐜", "🐌"];
+    const smallAnimals = ["🐈", "🐒", "🐕", "🦂", "🦔", "🦨", "🐢", "🦆", "🦤", "🐦", "🐓", "🐈‍⬛", "🐩", "🦫", "🦢"];
+    const bigAnimals = ["🦍", "🦘", "🦓", "🐖", "🐃", "🐂", "🦏", "🦣", "🐐", "🐪", "🐫", "🐆", "🐅"];
+    const hugeAnimals = ["🐘", "🦒", "🦖", "🐙"];
+    const allAnimals = [...tinyAnimals, ...smallAnimals, ...bigAnimals, ...hugeAnimals];
 
-    var player = {
-      x: 50,
-      y: 960,
-      width: 50,
-      height: 50,
-      vx: 10,
-      vy: 0,
-      gravity: 0.5,
-      jump: -10,
-      grounded: false,
-      jumping: false
+    const generatePlatform = () => {
+      const lastPlatform = platforms[platforms.length - 1] || { x: 0, y: 960, width: 500 };
+      const newPlatform = {
+        x: lastPlatform.x + lastPlatform.width + Math.floor(Math.random() * 100) + 50,
+        y: Math.min(canvas.height - 50, Math.max(50, lastPlatform.y + Math.floor(Math.random() * 200) - 100)),
+        width: Math.floor(Math.random() * 100) + 400,
+        height: 25
+      };
+      platforms.push(newPlatform);
+      generateAnimal(newPlatform);
     };
 
-    var platforms = [];
-    var y = 960;
-    var x = 0;
+    const generateAnimal = (platform) => {
+      const animalEmoji = allAnimals[Math.floor(Math.random() * allAnimals.length)];
+      const animalSize = tinyAnimals.includes(animalEmoji) ? 'tiny' : smallAnimals.includes(animalEmoji) ? 'small' : bigAnimals.includes(animalEmoji) ? 'big' : 'huge';
+      const newAnimal = { emoji: animalEmoji, x: platform.x + platform.width / 2, y: platform.y - 50, size: animalSize };
+      animals.push(newAnimal);
+    };
 
-var tinyAnimals = ["🐞", "🐛", "🦗", "🐜", "🐌"];
-var smallAnimals = ["🐈", "🐒", "🐕", "🦂", "🦔", "🦨", "🐢", "🦆", "🦤", "🐦", "🐓", "🐈‍⬛", "🐩", "🦫", "🦢"];
-var bigAnimals = ["🦍", "🦘", "🦓", "🐖", "🐃", "🐂", "🦏", "🦣", "🐐", "🐪", "🐫", "🐆", "🐅"];
-var hugeAnimals = ["🐘", "🦒", "🦖", "🐙"];
-var allAnimals = tinyAnimals.concat(smallAnimals, bigAnimals, hugeAnimals);
-
-function generatePlatform() {
-  var lastPlatform = platforms[platforms.length - 1];
-  var newPlatform = {
-    x: lastPlatform.x + lastPlatform.width + Math.floor(Math.random() * 100) + 50,
-    y: Math.min(canvas.height - 50, Math.max(50, lastPlatform.y + Math.floor(Math.random() * 200) - 100)),
-    width: Math.floor(Math.random() * 100) + 400,
-    height: 25
-  };
-  platforms.push(newPlatform);
-
-  // Animal generation logic
-  var animalEmoji = allAnimals[Math.floor(Math.random() * allAnimals.length)];
-  var animalSize;
-
-  if (tinyAnimals.includes(animalEmoji)) {
-    animalSize = 'tiny';
-  } else if (smallAnimals.includes(animalEmoji)) {
-    animalSize = 'small';
-  } else if (bigAnimals.includes(animalEmoji)) {
-    animalSize = 'big';
-  } else {
-    animalSize = 'huge';
-  }
-
-  var newAnimal = {
-    emoji: animalEmoji,
-    x: newPlatform.x + newPlatform.width / 2,
-    y: newPlatform.y - 50,
-    size: animalSize
-  };
-  animals.push(newAnimal);
-}
-
-  var animalType = Math.floor(Math.random() * 4);
-  var animalEmoji;
-  var animalSize;
-  if (animalType === 0) {
-    animalEmoji = tinyAnimals[Math.floor(Math.random() * tinyAnimals.length)];
-    animalSize = 'tiny';
-  } else if (animalType === 1) {
-    animalEmoji = smallAnimals[Math.floor(Math.random() * smallAnimals.length)];
-    animalSize = 'small';
-  } else if (animalType === 2) {
-    animalEmoji = bigAnimals[Math.floor(Math.random() * bigAnimals.length)];
-    animalSize = 'big';
-  } else {
-    animalEmoji = hugeAnimals[Math.floor(Math.random() * hugeAnimals.length)];
-    animalSize = 'huge';
-  }
-  var newAnimal = {
-    emoji: animalEmoji,
-    x: newPlatform.x + newPlatform.width / 2,
-    y: newPlatform.y - 50,
-    size: animalSize
-  };
-  animals.push(newAnimal);
-}
-
-    for (var i = 0; i < 20; i++) {
-      generatePlatform();
-    }
-
-    // Initialize player's y-coordinate to be on the first platform
+    for (let i = 0; i < 20; i++) generatePlatform();
     player.y = platforms[0].y - player.height;
 
-    function draw() {
+    const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      if (gameState === 'selectCharacter') {
-        ctx.font = "300px Arial";
-        ctx.fillText("💃", 600, 700);
-        ctx.font = "100px Arial";
-        ctx.fillText("or", 1000, 700);
-        ctx.font = "300px Arial";
-        ctx.fillText("🕺", 1400, 700);
-      } else {
-        ctx.font = "144px Arial";
-        ctx.fillText(playerEmoji, player.x - scrollX, player.y);
-        ctx.fillStyle = "#8B4513";
-        platforms.forEach(function(platform) {
-          ctx.fillRect(platform.x - scrollX, platform.y, platform.width, platform.height);
-        });
-      }
-    }
+      gameState === 'selectCharacter' ? drawCharacterSelection() : drawGame();
+    };
 
-    function update() {
+    const drawCharacterSelection = () => {
+      ctx.font = "300px Arial";
+      ctx.fillText("💃", 600, 700);
+      ctx.font = "100px Arial";
+      ctx.fillText("or", 1000, 700);
+      ctx.font = "300px Arial";
+      ctx.fillText("🕺", 1400, 700);
+    };
+
+    const drawGame = () => {
+      ctx.font = "144px Arial";
+      ctx.fillText(playerEmoji, player.x - scrollX, player.y);
+      ctx.fillStyle = "#8B4513";
+      platforms.forEach(platform => ctx.fillRect(platform.x - scrollX, platform.y, platform.width, platform.height));
+      animals.forEach(animal => {
+        ctx.font = animal.size === 'tiny' ? "50px Arial" : animal.size === 'small' ? "100px Arial" : animal.size === 'big' ? "200px Arial" : "300px Arial";
+        ctx.fillText(animal.emoji, animal.x - scrollX, animal.y);
+      });
+    };
+
+    const update = () => {
       if (gameState !== 'selectCharacter') {
         player.y += player.vy;
         player.vy += player.gravity;
         player.grounded = false;
-
-        platforms.forEach(function(platform) {
-          if (player.x < platform.x + platform.width &&
-              player.x + player.width > platform.x &&
-              player.y < platform.y + platform.height &&
-              player.y + player.height > platform.y) {
+        platforms.forEach(platform => {
+          if (player.x < platform.x + platform.width && player.x + player.width > platform.x && player.y < platform.y + platform.height && player.y + player.height > platform.y) {
             player.y = platform.y - player.height;
             player.vy = 0;
             player.grounded = true;
             player.jumping = false;
           }
         });
-
-        if (player.jumping) {
-          player.x += 15;
-        }
+        if (player.jumping) player.x += 15;
         scrollX = player.x - canvas.width / 2;
       }
-    }
+    };
 
-canvas.addEventListener("touchstart", function(e) {
-  e.preventDefault();
-  var touch = e.touches[0];
-  if (gameState === 'selectCharacter') {
-    if (touch.clientX >= 600 && touch.clientX <= 900 && touch.clientY >= 400 && touch.clientY <= 700) {
-      playerEmoji = "💃";
-      gameState = 'play';
-    } else if (touch.clientX >= 1400 && touch.clientX <= 1700 && touch.clientY >= 400 && touch.clientY <= 700) {
-      playerEmoji = "🕺";
-      gameState = 'play';
-    }
-  } else {
-    if (player.grounded) {
-      player.vy = player.jump;
-      player.grounded = false;
-      player.jumping = true;
-    }
-  }
-});
+    canvas.addEventListener("touchstart", e => {
+      e.preventDefault();
+      const touch = e.touches[0];
+      if (gameState === 'selectCharacter') {
+        if (touch.clientX >= 600 && touch.clientX <= 900 && touch.clientY >= 400 && touch.clientY <= 700) {
+          playerEmoji = "💃";
+          gameState = 'play';
+        } else if (touch.clientX >= 1400 && touch.clientX <= 1700 && touch.clientY >= 400 && touch.clientY <= 700) {
+          playerEmoji = "🕺";
+          gameState = 'play';
+        }
+      } else {
+        if (player.grounded) {
+          player.vy = player.jump;
+          player.grounded = false;
+          player.jumping = true;
+        }
+      }
+    });
 
-    function gameLoop() {
+    const gameLoop = () => {
       update();
       draw();
       requestAnimationFrame(gameLoop);
-    }
+    };
 
     gameLoop();
   </script>
