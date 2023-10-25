@@ -29,6 +29,8 @@
     const hugeAnimals = ["🐘", "🦣", "🐙"];
     const tallAnimals = ["🦒", "🦖", "🦕"];
     const allAnimals = [...tinyAnimals, ...smallAnimals, ...bigAnimals, ...hugeAnimals, ...tallAnimals];
+    let animalSpawnCounter = 0; // Added counter for animal spawn
+    let bgEmojiSpawnCounter = 0; // Added counter for background emoji spawn
 
     // Event listeners for touchstart and touchend
     canvas.addEventListener("touchstart", function(e) {
