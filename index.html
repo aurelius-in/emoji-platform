@@ -17,7 +17,8 @@
 
     let gameState = 'selectCharacter', playerEmoji = null, scrollX = 0;
     let player = { x: 50, y: 960, width: 50, height: 50, vx: 10, vy: 0, gravity: 0.5, jump: -10, grounded: false, jumping: false };
-    let platforms = [], animals = [], ramps = [];
+    let hills = [{x: 0, y: 960}, {x: 500, y: 960}];
+    let animals = [];
     let touchStartX, touchStartY, touchEndX, touchEndY;
 
     canvas.addEventListener("touchstart", function(e) {
@@ -63,76 +64,48 @@
       }
     });
 
-    platforms.push({ x: 0, y: 960, width: 500, height: 25 });
-    player.y = platforms[0].y - player.height;
-
-    const tinyAnimals = ["🐞", "🐛", "🦗", "🐜", "🐌"];
-    const smallAnimals = ["🐈", "🐒", "🐕", "🦂", "🦔", "🦨", "🐢", "🦆", "🦤", "🐦", "🐓", "🐈‍⬛", "🐩", "🦫", "🦢"];
-    const bigAnimals = ["🦍", "🦘", "🦓", "🐖", "🐃", "🐂", "🦏", "🦣", "🐐", "🐪", "🐫", "🐆", "🐅"];
-    const hugeAnimals = ["🐘", "🦒", "🦖", "🐙"];
-    const allAnimals = [...tinyAnimals, ...smallAnimals, ...bigAnimals, ...hugeAnimals];
-
-    const generatePlatform = () => {
-      const lastPlatform = platforms[platforms.length - 1] || { x: 0, y: 960, width: 500 };
-      const newPlatform = {
-        x: lastPlatform.x + lastPlatform.width + Math.floor(Math.random() * 200) + 100,
-        y: Math.min(canvas.height - 50, Math.max(50, lastPlatform.y + Math.floor(Math.random() * 400) - 200)),
-        width: Math.floor(Math.random() * 100) + 400,
-        height: 25
+    const generateHill = () => {
+      const lastHill = hills[hills.length - 1];
+      const newHill = {
+        x: lastHill.x + Math.floor(Math.random() * 200) + 100,
+        y: Math.min(canvas.height - 50, Math.max(50, lastHill.y + Math.floor(Math.random() * 400) - 200))
       };
-      platforms.push(newPlatform);
-
-      const newRamp = {
-        x1: lastPlatform.x + lastPlatform.width,
-        y1: lastPlatform.y,
-        x2: newPlatform.x,
-        y2: newPlatform.y
-      };
-      ramps.push(newRamp);
-
-      generateAnimal(newPlatform);
+      hills.push(newHill);
+      generateAnimal(newHill);
     };
 
-    const generateAnimal = (platform) => {
-      const animalEmoji = allAnimals[Math.floor(Math.random() * allAnimals.length)];
-      const animalSize = tinyAnimals.includes(animalEmoji) ? 'tiny' : smallAnimals.includes(animalEmoji) ? 'small' : bigAnimals.includes(animalEmoji) ? 'big' : 'huge';
-      const newAnimal = { emoji: animalEmoji, x: platform.x + platform.width / 2, y: platform.y - 50, size: animalSize };
+    const generateAnimal = (hill) => {
+      const animalEmoji = ["🐈", "🐒", "🐕"][Math.floor(Math.random() * 3)];
+      const newAnimal = { emoji: animalEmoji, x: hill.x, y: hill.y - 50 };
       animals.push(newAnimal);
     };
 
-    for (let i = 0; i < 20; i++) generatePlatform();
-    player.y = platforms[0].y - player.height;
+    for (let i = 0; i < 20; i++) generateHill();
 
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      gameState === 'selectCharacter' ? drawCharacterSelection() : drawGame();
-    };
-
-    const drawCharacterSelection = () => {
-      ctx.font = "300px Arial";
-      ctx.fillText("👩‍🦽", 600, 700);
-      ctx.font = "100px Arial";
-      ctx.fillText("or", 1000, 700);
-      ctx.font = "300px Arial";
-      ctx.fillText("👨‍🦽", 1400, 700);
-    };
-
-    const drawGame = () => {
-      ctx.font = "144px Arial";
-      ctx.fillText(playerEmoji, player.x - scrollX, player.y);
-      ctx.fillStyle = "#8B4513";
-      platforms.forEach(platform => ctx.fillRect(platform.x - scrollX, platform.y, platform.width, platform.height));
-      ramps.forEach(ramp => {
+      if (gameState === 'selectCharacter') {
+        ctx.font = "300px Arial";
+        ctx.fillText("👩‍🦽", 600, 700);
+        ctx.fillText("or", 1000, 700);
+        ctx.fillText("👨‍🦽", 1400, 700);
+      } else {
+        ctx.font = "144px Arial";
+        ctx.fillText(playerEmoji, player.x - scrollX, player.y);
         ctx.beginPath();
-        ctx.moveTo(ramp.x1 - scrollX, ramp.y1);
-        ctx.lineTo(ramp.x2 - scrollX, ramp.y2);
-        ctx.lineWidth = 25;
+        hills.forEach((hill, index) => {
+          if (index === 0) {
+            ctx.moveTo(hill.x - scrollX, hill.y);
+          } else {
+            ctx.lineTo(hill.x - scrollX, hill.y);
+          }
+        });
         ctx.stroke();
-      });
-      animals.forEach(animal => {
-        ctx.font = animal.size === 'tiny' ? "50px Arial" : animal.size === 'small' ? "100px Arial" : animal.size === 'big' ? "200px Arial" : "300px Arial";
-        ctx.fillText(animal.emoji, animal.x - scrollX, animal.y);
-      });
+        animals.forEach(animal => {
+          ctx.font = "100px Arial";
+          ctx.fillText(animal.emoji, animal.x - scrollX, animal.y);
+        });
+      }
     };
 
     const update = () => {
@@ -140,15 +113,28 @@
         player.y += player.vy;
         player.vy += player.gravity;
         player.grounded = false;
-        platforms.forEach(platform => {
-          if (player.x < platform.x + platform.width && player.x + player.width > platform.x && player.y < platform.y + platform.height && player.y + player.height > platform.y) {
-            player.y = platform.y - player.height;
-            player.vy = 0;
-            player.grounded = true;
-            player.jumping = false;
+
+        // Collision detection with hills
+        hills.forEach((hill, index) => {
+          if (index < hills.length - 1) {
+            const nextHill = hills[index + 1];
+            if (player.x >= hill.x && player.x <= nextHill.x) {
+              const slope = (nextHill.y - hill.y) / (nextHill.x - hill.x);
+              const expectedY = slope * (player.x - hill.x) + hill.y;
+              if (player.y >= expectedY) {
+                player.y = expectedY;
+                player.vy = 0;
+                player.grounded = true;
+                player.jumping = false;
+              }
+            }
           }
         });
-        if (player.jumping) player.x += 15;
+
+        if (player.x > hills[hills.length - 2].x) {
+          generateHill();
+        }
+
         scrollX = player.x - canvas.width / 2;
       }
     };
