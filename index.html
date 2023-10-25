@@ -90,31 +90,65 @@
     for (let i = 0; i < 20; i++) generateHill();
 
     const draw = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      if (gameState === 'selectCharacter') {
-        ctx.font = "300px Arial";
-        ctx.fillText("👩‍🦽", 600, 700);
-        ctx.fillText("or", 1000, 700);
-        ctx.fillText("👨‍🦽", 1400, 700);
-      } else {
-        ctx.font = "144px Arial";
-        ctx.fillText(playerEmoji, player.x - scrollX, player.y);
-        ctx.beginPath();
-        hills.forEach((hill, index) => {
-          if (index === 0) {
-            ctx.moveTo(hill.x - scrollX, hill.y);
-          } else {
-            ctx.lineTo(hill.x - scrollX, hill.y);
-          }
-        });
-        ctx.stroke();
-        animals.forEach(animal => {
-          ctx.font = animal.size === 'tiny' ? "50px Arial" : animal.size === 'small' ? "100px Arial" : animal.size === 'big' ? "200px Arial" : "300px Arial";
-          ctx.fillText(animal.emoji, animal.x - scrollX, animal.y);
-        });
-      }
-    };
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  if (gameState === 'selectCharacter') {
+    ctx.font = "300px Arial";
+    ctx.fillText("👩‍🦽", 600, 700);
+    ctx.fillText("or", 1000, 700);
+    ctx.fillText("👨‍🦽", 1400, 700);
+  } else {
+    // Save the current context state
+    ctx.save();
 
+    // Translate to the player's position
+    ctx.translate(player.x - scrollX + player.width / 2, player.y + player.height / 2);
+
+    // Flip the context horizontally
+    ctx.scale(-1, 1);
+
+    // Draw the flipped emoji
+    ctx.font = "144px Arial";
+    ctx.fillText(playerEmoji, -player.width / 2, -player.height / 2);
+
+    // Restore the context to its original state
+    ctx.restore();
+
+    // Draw hills
+    ctx.beginPath();
+    hills.forEach((hill, index) => {
+      if (index === 0) {
+        ctx.moveTo(hill.x - scrollX, hill.y);
+      } else {
+        ctx.lineTo(hill.x - scrollX, hill.y);
+      }
+    });
+    ctx.lineTo(canvas.width, canvas.height);
+    ctx.lineTo(0, canvas.height);
+    ctx.closePath();
+    ctx.fillStyle = "#8B4513"; // Brown color for dirt
+    ctx.fill();
+    ctx.stroke();
+
+    // Draw grass on hills
+    hills.forEach((hill, index) => {
+      for (let i = 0; i < 10; i++) {
+        const x = hill.x - scrollX + Math.random() * 50 - 25;
+        const y = hill.y + Math.random() * 5 - 2.5;
+        ctx.strokeStyle = `rgb(${Math.floor(Math.random() * 56) + 100}, ${Math.floor(Math.random() * 56) + 100}, 0)`;
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x, y - 5);
+        ctx.stroke();
+      }
+    });
+
+    // Draw animals
+    animals.forEach(animal => {
+      ctx.font = animal.size === 'tiny' ? "50px Arial" : animal.size === 'small' ? "100px Arial" : animal.size === 'big' ? "200px Arial" : animal.size === 'huge' ? "300px Arial" : "450px Arial";
+      ctx.fillText(animal.emoji, animal.x - scrollX, animal.y);
+    });
+  }
+};
 
     const update = () => {
       if (gameState !== 'selectCharacter') {
