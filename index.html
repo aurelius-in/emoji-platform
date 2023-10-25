@@ -20,6 +20,11 @@
     let hills = [{x: 0, y: 960}, {x: 500, y: 960}];
     let animals = [];
     let touchStartX, touchStartY, touchEndX, touchEndY;
+    const tinyAnimals = ["🐞", "🐛", "🦗", "🐜", "🐌"];
+    const smallAnimals = ["🐈", "🐒", "🐕", "🦂", "🦔", "🦨", "🐢", "🦆", "🦤", "🐦", "🐓", "🐈‍⬛", "🐩", "🦫", "🦢"];
+    const bigAnimals = ["🦍", "🦘", "🦓", "🐖", "🐃", "🐂", "🦏", "🦣", "🐐", "🐪", "🐫", "🐆", "🐅"];
+    const hugeAnimals = ["🐘", "🦒", "🦖", "🐙"];
+    const allAnimals = [...tinyAnimals, ...smallAnimals, ...bigAnimals, ...hugeAnimals];
 
     canvas.addEventListener("touchstart", function(e) {
       e.preventDefault();
