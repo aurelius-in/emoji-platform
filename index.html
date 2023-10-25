@@ -57,6 +57,8 @@ backgroundImage.src = "jungle-bg3.png";
       jumping: false
     };
 
+// Initialize player's y-coordinate to be on the first platform
+player.y = platforms[0].y - player.height;
     
 // Initialize platforms
 var centerPlatform = {
