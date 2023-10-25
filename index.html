@@ -14,61 +14,57 @@
     screen.orientation.lock('landscape');
     const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
-let animals = [];
+
     let gameState = 'selectCharacter', playerEmoji = null, scrollX = 0;
     let player = { x: 50, y: 960, width: 50, height: 50, vx: 10, vy: 0, gravity: 0.5, jump: -10, grounded: false, jumping: false };
-    let platforms = [], animals = [];
+    let platforms = [], animals = [], ramps = [];
     let touchStartX, touchStartY, touchEndX, touchEndY;
 
-canvas.addEventListener("touchstart", function(e) {
-  e.preventDefault();
-  const touch = e.touches[0];
-  touchStartX = touch.clientX;
-  touchStartY = touch.clientY;
+    canvas.addEventListener("touchstart", function(e) {
+      e.preventDefault();
+      const touch = e.touches[0];
+      touchStartX = touch.clientX;
+      touchStartY = touch.clientY;
 
-  if (gameState === 'selectCharacter') {
-    if (touch.clientX >= 600 && touch.clientX <= 900 && touch.clientY >= 400 && touch.clientY <= 700) {
-      playerEmoji = "👨‍🦽";
-      gameState = 'play';
-    } else if (touch.clientX >= 1400 && touch.clientX <= 1700 && touch.clientY >= 400 && touch.clientY <= 700) {
-      playerEmoji = "👩‍🦽";
-      gameState = 'play';
-    }
-  }
-});
-
-canvas.addEventListener("touchend", function(e) {
-  e.preventDefault();
-  const touch = e.changedTouches[0];
-  touchEndX = touch.clientX;
-  touchEndY = touch.clientY;
-
-  const deltaX = touchEndX - touchStartX;
-  const deltaY = touchEndY - touchStartY;
-
-  if (gameState !== 'selectCharacter') {
-    if (Math.abs(deltaX) > Math.abs(deltaY)) {
-      if (deltaX > 0) {
-        player.x += 50;
-      } else {
-        player.x -= 50;
+      if (gameState === 'selectCharacter') {
+        if (touch.clientX >= 600 && touch.clientX <= 900 && touch.clientY >= 400 && touch.clientY <= 700) {
+          playerEmoji = "👨‍🦽";
+          gameState = 'play';
+        } else if (touch.clientX >= 1400 && touch.clientX <= 1700 && touch.clientY >= 400 && touch.clientY <= 700) {
+          playerEmoji = "👩‍🦽";
+          gameState = 'play';
+        }
       }
-    } else {
-      if (deltaY < 0 && player.grounded) {
-        player.vy = player.jump;
-        player.grounded = false;
-        player.jumping = true;
+    });
+
+    canvas.addEventListener("touchend", function(e) {
+      e.preventDefault();
+      const touch = e.changedTouches[0];
+      touchEndX = touch.clientX;
+      touchEndY = touch.clientY;
+
+      const deltaX = touchEndX - touchStartX;
+      const deltaY = touchEndY - touchStartY;
+
+      if (gameState !== 'selectCharacter') {
+        if (Math.abs(deltaX) > Math.abs(deltaY)) {
+          if (deltaX > 0) {
+            player.x += 50;
+          } else {
+            player.x -= 50;
+          }
+        } else {
+          if (deltaY < 0 && player.grounded) {
+            player.vy = player.jump;
+            player.grounded = false;
+            player.jumping = true;
+          }
+        }
       }
-    }
-  }
-});
+    });
 
-
-// Manually set the first platform to be under the player
-platforms.push({ x: 0, y: 960, width: 500, height: 25 });
-
-// Initialize player's y-coordinate to be on the first platform
-player.y = platforms[0].y - player.height;
+    platforms.push({ x: 0, y: 960, width: 500, height: 25 });
+    player.y = platforms[0].y - player.height;
 
     const tinyAnimals = ["🐞", "🐛", "🦗", "🐜", "🐌"];
     const smallAnimals = ["🐈", "🐒", "🐕", "🦂", "🦔", "🦨", "🐢", "🦆", "🦤", "🐦", "🐓", "🐈‍⬛", "🐩", "🦫", "🦢"];
@@ -79,12 +75,21 @@ player.y = platforms[0].y - player.height;
     const generatePlatform = () => {
       const lastPlatform = platforms[platforms.length - 1] || { x: 0, y: 960, width: 500 };
       const newPlatform = {
-        x: lastPlatform.x + lastPlatform.width + Math.floor(Math.random() * 100) + 50,
+        x: lastPlatform.x + lastPlatform.width,
         y: Math.min(canvas.height - 50, Math.max(50, lastPlatform.y + Math.floor(Math.random() * 200) - 100)),
         width: Math.floor(Math.random() * 100) + 400,
         height: 25
       };
       platforms.push(newPlatform);
+
+      const newRamp = {
+        x1: lastPlatform.x + lastPlatform.width,
+        y1: lastPlatform.y,
+        x2: newPlatform.x,
+        y2: newPlatform.y
+      };
+      ramps.push(newRamp);
+
       generateAnimal(newPlatform);
     };
 
@@ -120,6 +125,15 @@ player.y = platforms[0].y - player.height;
       animals.forEach(animal => {
         ctx.font = animal.size === 'tiny' ? "50px Arial" : animal.size === 'small' ? "100px Arial" : animal.size === 'big' ? "200px Arial" : "300px Arial";
         ctx.fillText(animal.emoji, animal.x - scrollX, animal.y);
+      });
+
+      ctx.strokeStyle = "#8B4513";
+      ctx.lineWidth = 5;
+      ramps.forEach(ramp => {
+        ctx.beginPath();
+        ctx.moveTo(ramp.x1 - scrollX, ramp.y1);
+        ctx.lineTo(ramp.x2 - scrollX, ramp.y2);
+        ctx.stroke();
       });
     };
 
