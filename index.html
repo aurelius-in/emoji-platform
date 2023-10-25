@@ -180,33 +180,41 @@
   }
 };
 
-    const update = () => {
-      if (gameState !== 'selectCharacter') {
-        player.y += player.vy;
-        player.vy += player.gravity;
-        player.grounded = false;
-        // Collision detection with hills
-        hills.forEach((hill, index) => {
-          if (index < hills.length - 1) {
-            const nextHill = hills[index + 1];
-            if (player.x >= hill.x && player.x <= nextHill.x) {
-              const slope = (nextHill.y - hill.y) / (nextHill.x - hill.x);
-              const expectedY = slope * (player.x - hill.x) + hill.y;
-              if (player.y >= expectedY) {
-                player.y = expectedY;
-                player.vy = 0;
-                player.grounded = true;
-                player.jumping = false;
-              }
+const update = () => {
+  if (gameState !== 'selectCharacter') {
+    player.y += player.vy;
+    player.vy += player.gravity;
+    player.grounded = false;
+
+    // Collision detection with hills
+    hills.forEach((hill, index) => {
+      if (index < hills.length - 1) {
+        const nextHill = hills[index + 1];
+        if (player.x >= hill.x && player.x <= nextHill.x) {
+          const slope = (nextHill.y - hill.y) / (nextHill.x - hill.x);
+          const expectedY = slope * (player.x - hill.x) + hill.y;
+          if (player.y >= expectedY) {
+            player.y = expectedY;
+            player.vy = 0;
+            player.grounded = true;
+            player.jumping = false;
+
+            // Apply gravity based on slope
+            if (slope > 0) {
+              player.x += slope * 2;  // Adjust the multiplier as needed
             }
           }
-        });
-        if (player.x > hills[hills.length - 2].x) {
-          generateHill();
         }
-        scrollX = player.x - canvas.width / 2;
       }
-    };
+    });
+
+    if (player.x > hills[hills.length - 2].x) {
+      generateHill();
+    }
+
+    scrollX = player.x - canvas.width / 2;
+  }
+};
 
     const gameLoop = () => {
       update();
