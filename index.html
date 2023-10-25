@@ -49,17 +49,39 @@ var bigAnimals = ["🦍", "🦘", "🦓", "🐖", "🐃", "🐂", "🦏", "🦣"
 var hugeAnimals = ["🐘", "🦒", "🦖", "🐙"];
 
     function generatePlatform() {
-      var platformWidth = Math.floor(Math.random() * 101) + 600;  // Random width between 500 and 600
-      var newPlatform = {
-        x: x,
-        y: y,
-        width: platformWidth,
-        height: 25
-      };
-      platforms.push(newPlatform);
-      x += platformWidth + 75;
-      y += Math.random() < 0.5 ? 100 : -100;
-    }
+  var lastPlatform = platforms[platforms.length - 1];
+  var newPlatform = {
+    x: lastPlatform.x + lastPlatform.width + Math.floor(Math.random() * 100) + 50,
+    y: Math.min(canvas.height - 50, Math.max(50, lastPlatform.y + Math.floor(Math.random() * 200) - 100)),
+    width: Math.floor(Math.random() * 100) + 400,
+    height: 25
+  };
+  platforms.push(newPlatform);
+
+  var animalType = Math.floor(Math.random() * 4);
+  var animalEmoji;
+  var animalSize;
+  if (animalType === 0) {
+    animalEmoji = tinyAnimals[Math.floor(Math.random() * tinyAnimals.length)];
+    animalSize = 'tiny';
+  } else if (animalType === 1) {
+    animalEmoji = smallAnimals[Math.floor(Math.random() * smallAnimals.length)];
+    animalSize = 'small';
+  } else if (animalType === 2) {
+    animalEmoji = bigAnimals[Math.floor(Math.random() * bigAnimals.length)];
+    animalSize = 'big';
+  } else {
+    animalEmoji = hugeAnimals[Math.floor(Math.random() * hugeAnimals.length)];
+    animalSize = 'huge';
+  }
+  var newAnimal = {
+    emoji: animalEmoji,
+    x: newPlatform.x + newPlatform.width / 2,
+    y: newPlatform.y - 50,
+    size: animalSize
+  };
+  animals.push(newAnimal);
+}
 
     for (var i = 0; i < 20; i++) {
       generatePlatform();
