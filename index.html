@@ -21,11 +21,9 @@
   <canvas id="gameCanvas" width="3200" height="1440"></canvas>
   <script>
     
-
-    // Declare and load the background image at the top of your script
-    var backgroundImage = new Image();
-    backgroundImage.src = "jungle-bg3.png";
-
+// Declare and load the background image at the top of your script
+var backgroundImage = new Image();
+backgroundImage.src = "jungle-bg3.png";
     
     var smallAnimals = ["🐈", "🐒", "🐕", "🦂", "🦔"];
     var bigAnimals = ["🦍", "🦘", "🦓", "🐖", "🐃", "🐂", "🦏"];
@@ -58,6 +56,33 @@
       grounded: false,
       jumping: false
     };
+
+    
+// Initialize platforms
+var centerPlatform = {
+  x: canvas.width / 2 - 250,
+  y: canvas.height / 2,
+  width: 500,
+  height: 25
+};
+platforms.push(centerPlatform);
+
+for (var i = 1; i <= 4; i++) {
+  platforms.push({
+    x: centerPlatform.x - (i * 575),
+    y: centerPlatform.y,
+    width: 500,
+    height: 25
+  });
+  platforms.push({
+    x: centerPlatform.x + (i * 575),
+    y: centerPlatform.y,
+    width: 500,
+    height: 25
+  });
+}
+
+    
     
     function generatePlatform(direction) {
   var platformWidth = Math.floor(Math.random() * 101) + 400;  // Random width between 400 and 500
@@ -97,10 +122,11 @@ window.addEventListener("DOMContentLoaded", (event) => {
 });
 
 function draw() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);  // Clear the canvas first
+  // Calculate the scaled width while maintaining the aspect ratio
+  var scaledWidth = canvas.height * 6;
+
   // Draw the background image
-  ctx.drawImage(backgroundImage, 0, 0, backgroundImage.width, backgroundImage.height, 0, 0, canvas.width, canvas.height);
-    
+  ctx.drawImage(backgroundImage, 0, 0, backgroundImage.width, backgroundImage.height, -scrollX, 0, scaledWidth, canvas.height);
 
       if (gameState === 'selectCharacter') {
         ctx.font = "300px Arial";
