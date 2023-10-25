@@ -142,6 +142,36 @@
     // Restore the context to its original state
     ctx.restore();
 
+    // Draw background hills
+  ctx.beginPath();
+  ctx.moveTo(bgHills[0].x - scrollX, bgHills[0].y);
+  bgHills.forEach((hill, index) => {
+    if (index !== 0) {
+      ctx.lineTo(hill.x - scrollX, hill.y);
+    }
+  });
+  ctx.lineTo(canvas.width, canvas.height);
+  ctx.lineTo(0, canvas.height);
+  ctx.closePath();
+  ctx.fillStyle = "#D2B48C"; // Sand color for background hills
+  ctx.fill();
+  ctx.stroke();
+
+    // Generate and draw background emojis
+  const currentTime = new Date().getTime();
+  if (currentTime - lastBgEmojiSpawnTime >= Math.random() * 250 + 250) {
+    const bgEmoji = bgEmojiList[Math.floor(Math.random() * bgEmojiList.length)];
+    const size = Math.floor(Math.random() * 31) + 40;
+    const newBgEmoji = { emoji: bgEmoji, x: player.x + canvas.width, y: bgHills[bgHills.length - 1].y - 50, size: size };
+    bgEmojis.push(newBgEmoji);
+    lastBgEmojiSpawnTime = currentTime;
+  }
+  bgEmojis.forEach(bgEmoji => {
+    ctx.font = `${bgEmoji.size}px Arial`;
+    ctx.fillText(bgEmoji.emoji, bgEmoji.x - scrollX, bgEmoji.y);
+  });
+};
+
        // Draw rounded hills
     ctx.beginPath();
     ctx.moveTo(hills[0].x - scrollX, hills[0].y);
