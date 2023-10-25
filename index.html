@@ -92,10 +92,40 @@
     const draw = () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   if (gameState === 'selectCharacter') {
+    // Save the current context state
+    ctx.save();
+
+    // Translate to the emoji's position
+    ctx.translate(750, 700);
+
+    // Flip the context horizontally
+    ctx.scale(-1, 1);
+
+    // Draw the flipped emoji
     ctx.font = "300px Arial";
-    ctx.fillText("👩‍🦽", 600, 700);
+    ctx.fillText("👩‍🦽", -150, 0);
+
+    // Restore the context to its original state
+    ctx.restore();
+
+    ctx.font = "300px Arial";
     ctx.fillText("or", 1000, 700);
-    ctx.fillText("👨‍🦽", 1400, 700);
+
+    // Save the current context state
+    ctx.save();
+
+    // Translate to the emoji's position
+    ctx.translate(1550, 700);
+
+    // Flip the context horizontally
+    ctx.scale(-1, 1);
+
+    // Draw the flipped emoji
+    ctx.font = "300px Arial";
+    ctx.fillText("👨‍🦽", -150, 0);
+
+    // Restore the context to its original state
+    ctx.restore();
   } else {
     // Save the current context state
     ctx.save();
@@ -113,7 +143,7 @@
     // Restore the context to its original state
     ctx.restore();
 
-    // Draw hills
+    // Draw hills and other elements
     ctx.beginPath();
     hills.forEach((hill, index) => {
       if (index === 0) {
