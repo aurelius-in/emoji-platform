@@ -26,12 +26,14 @@
     const hugeAnimals = ["🐘", "🦒", "🦖", "🐙"];
     const allAnimals = [...tinyAnimals, ...smallAnimals, ...bigAnimals, ...hugeAnimals];
 
+
+    // Event listeners for touchstart and touchend
     canvas.addEventListener("touchstart", function(e) {
       e.preventDefault();
       const touch = e.touches[0];
       touchStartX = touch.clientX;
       touchStartY = touch.clientY;
-
+      // Character selection logic
       if (gameState === 'selectCharacter') {
         if (touch.clientX >= 600 && touch.clientX <= 900 && touch.clientY >= 400 && touch.clientY <= 700) {
           playerEmoji = "👨‍🦽";
@@ -48,11 +50,10 @@
       const touch = e.changedTouches[0];
       touchEndX = touch.clientX;
       touchEndY = touch.clientY;
-
-      const deltaX = touchEndX - touchStartX;
-      const deltaY = touchEndY - touchStartY;
-
+      // Movement logic
       if (gameState !== 'selectCharacter') {
+        const deltaX = touchEndX - touchStartX;
+        const deltaY = touchEndY - touchStartY;
         if (Math.abs(deltaX) > Math.abs(deltaY)) {
           if (deltaX > 0) {
             player.x += 50;
@@ -80,8 +81,9 @@
     };
 
     const generateAnimal = (hill) => {
-      const animalEmoji = ["🐈", "🐒", "🐕"][Math.floor(Math.random() * 3)];
-      const newAnimal = { emoji: animalEmoji, x: hill.x, y: hill.y - 50 };
+      const animalEmoji = allAnimals[Math.floor(Math.random() * allAnimals.length)];
+      const animalSize = tinyAnimals.includes(animalEmoji) ? 'tiny' : smallAnimals.includes(animalEmoji) ? 'small' : bigAnimals.includes(animalEmoji) ? 'big' : 'huge';
+      const newAnimal = { emoji: animalEmoji, x: hill.x, y: hill.y - 50, size: animalSize };
       animals.push(newAnimal);
     };
 
@@ -107,18 +109,18 @@
         });
         ctx.stroke();
         animals.forEach(animal => {
-          ctx.font = "100px Arial";
+          ctx.font = animal.size === 'tiny' ? "50px Arial" : animal.size === 'small' ? "100px Arial" : animal.size === 'big' ? "200px Arial" : "300px Arial";
           ctx.fillText(animal.emoji, animal.x - scrollX, animal.y);
         });
       }
     };
+
 
     const update = () => {
       if (gameState !== 'selectCharacter') {
         player.y += player.vy;
         player.vy += player.gravity;
         player.grounded = false;
-
         // Collision detection with hills
         hills.forEach((hill, index) => {
           if (index < hills.length - 1) {
@@ -135,11 +137,9 @@
             }
           }
         });
-
         if (player.x > hills[hills.length - 2].x) {
           generateHill();
         }
-
         scrollX = player.x - canvas.width / 2;
       }
     };
