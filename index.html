@@ -109,18 +109,25 @@
     }
 
     canvas.addEventListener("touchstart", function(e) {
-      e.preventDefault();
-      var touch = e.touches[0];
-      if (gameState === 'selectCharacter') {
-        // ... (character selection logic remains the same)
-      } else {
-        if (player.grounded) {
-          player.vy = player.jump;
-          player.grounded = false;
-          player.jumping = true;
-        }
-      }
-    });
+  e.preventDefault();
+  var touch = e.touches[0];
+  if (gameState === 'selectCharacter') {
+    if (touch.pageX >= 600 && touch.pageX <= 900 && touch.pageY >= 400 && touch.pageY <= 700) {
+      playerEmoji = "\ud83d\udc83"; // 💃
+      gameState = 'play';
+    } else if (touch.pageX >= 1400 && touch.pageX <= 1700 && touch.pageY >= 400 && touch.pageY <= 700) {
+      playerEmoji = "\ud83d\udd7a"; // 🕺
+      gameState = 'play';
+    }
+  } else {
+    if (player.grounded) {
+      player.vy = player.jump;
+      player.grounded = false;
+      player.jumping = true;
+    }
+  }
+});
+
 
     function gameLoop() {
       update();
