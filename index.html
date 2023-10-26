@@ -75,20 +75,23 @@
       }
     });
 
-    const generateHill = () => {
-      const lastHill = hills[hills.length - 1];
-      const newHill = {
-        x: lastHill.x + Math.floor(Math.random() * 200) + 100,
-        y: Math.min(canvas.height - 50, Math.max(50, lastHill.y + Math.floor(Math.random() * 400) - 200))
-      };
-      hills.push(newHill);
-      generateAnimal(newHill);
-      animalSpawnCounter++;
-      if (animalSpawnCounter >= 4) { // Generate animal every 4th hill
-        generateAnimal(newHill);
-        animalSpawnCounter = 0;
-      }
-    };
+const generateHill = () => {
+  const lastHill = hills[hills.length - 1];
+  const newHill = {
+    // Generate the new hill further away from the player
+    x: lastHill.x + Math.floor(Math.random() * 400) + 300,
+    // Generate the new hill closer to the middle of the screen
+    y: Math.min(canvas.height - 200, Math.max(200, lastHill.y + Math.floor(Math.random() * 200) - 100))
+  };
+  hills.push(newHill);
+  generateAnimal(newHill);
+  animalSpawnCounter++;
+  if (animalSpawnCounter >= 4) { // Generate animal every 4th hill
+    generateAnimal(newHill);
+    animalSpawnCounter = 0;
+  }
+};
+
 
     const generateAnimal = (hill) => {
       const animalEmoji = allAnimals[Math.floor(Math.random() * allAnimals.length)];
