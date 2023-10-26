@@ -122,13 +122,23 @@ const generateBgHill = () => {
 };
 
     const generateAnimal = (hill) => {
-      const animalEmoji = allAnimals[Math.floor(Math.random() * allAnimals.length)];
-      const animalSize = tinyAnimals.includes(animalEmoji) ? 'tiny' : smallAnimals.includes(animalEmoji) ? 'small' : bigAnimals.includes(animalEmoji) ? 'big' : 'huge';
-      const newAnimal = { emoji: animalEmoji, x: hill.x, y: hill.y - 50, size: animalSize };
-      animals.push(newAnimal);
-    };
+  const animalEmoji = allAnimals[Math.floor(Math.random() * allAnimals.length)];
+  let animalSize = tinyAnimals.includes(animalEmoji) ? 'tiny' : smallAnimals.includes(animalEmoji) ? 'small' : bigAnimals.includes(animalEmoji) ? 'big' : 'huge';
+  
+  if (tallAnimals.includes(animalEmoji)) {
+    animalSize = 'tall';
+  }
 
-    for (let i = 0; i < 20; i++);
+  let newY = player.y + 10; // Default 10 pixels lower, adjust as needed
+  
+  // If the animal is tall, make it spawn even lower
+  if (animalSize === 'tall') {
+    newY = player.y + 50; // 50 pixels lower for tall animals, adjust as needed
+  }
+
+  const newAnimal = { emoji: animalEmoji, x: hill.x, y: newY, size: animalSize };
+  animals.push(newAnimal);
+};
  
 const draw = () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
