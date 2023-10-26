@@ -92,16 +92,17 @@ const generateHill = () => {
     y: Math.min(canvas.height - 400, Math.max(400, lastHill.y + Math.floor(Math.random() * 800) - 400))
   };
   hills.push(newHill);
-  generateAnimal(newHill);
-};
+       generateAnimal(hills[hills.length - 1]);  // Generate animal for the new hill
+    };
 
 const generateBgHill = () => {
   const lastBgHill = bgHills[bgHills.length - 1];
   const correspondingGroundHill = hills.find(hill => hill.x === lastBgHill.x);
   
   let newY;
-  if (correspondingGroundHill) {
-    newY = Math.min(canvas.height - 400, Math.max(400, correspondingGroundHill.y - Math.floor(Math.random() * 190) - 10));
+  if (newY >= correspondingGroundHill.y) {
+        newY = correspondingGroundHill.y - 100; // 10 pixels above the ground line
+      }
   } else {
     newY = lastBgHill.y + Math.floor(Math.random() * 151) - 60; // Random value between -60 and +90
     newY = Math.min(canvas.height - 400, Math.max(400, newY));
@@ -111,14 +112,12 @@ const generateBgHill = () => {
   if (correspondingGroundHill && newY >= correspondingGroundHill.y) {
     newY = correspondingGroundHill.y - 10; // 10 pixels above the ground line
   }
-
   const newBgHill = {
     x: lastBgHill.x + Math.floor(Math.random() * 800) + 1000,
     y: newY
   };
   bgHills.push(newBgHill);
 };
-
     
 const generateAnimal = (hill) => {
   const animalEmoji = allAnimals[Math.floor(Math.random() * allAnimals.length)];
