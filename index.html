@@ -232,6 +232,14 @@ const update = () => {
     let prevHill = null;
     let slope = 0;
 
+    // Apply momentum
+      const currentTime = new Date().getTime();
+      if (currentTime - lastSwipeTime <= momentumDuration) {
+        const timePassed = currentTime - lastSwipeTime;
+        const momentumFactor = 1 - (timePassed / momentumDuration);
+        player.x += playerMomentum * momentumFactor;
+      }
+
     // Collision detection with hills
     hills.forEach((hill, index) => {
       if (index > 0) {
