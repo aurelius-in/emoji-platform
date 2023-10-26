@@ -99,7 +99,8 @@
 
     for (let i = 0; i < 20; i++) generateHill();
 
-    const draw = () => {
+    
+const draw = () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   if (gameState === 'selectCharacter') {
     // Save the current context state
@@ -217,7 +218,6 @@
     animals.forEach(animal => {
       ctx.font = animal.size === 'tiny' ? "50px Arial" : animal.size === 'small' ? "100px Arial" : animal.size === 'big' ? "200px Arial" : animal.size === 'huge' ? "300px Arial" : "450px Arial";
       ctx.fillText(animal.emoji, animal.x - scrollX, animal.y);
-    });
   }
 };
 
