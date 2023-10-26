@@ -239,12 +239,12 @@ const update = () => {
     let slope = 0;
 
     // Apply momentum
-      const currentTime = new Date().getTime();
-      if (currentTime - lastSwipeTime <= momentumDuration) {
-        const timePassed = currentTime - lastSwipeTime;
-        const momentumFactor = 1 - (timePassed / momentumDuration);
-        player.x += playerMomentum * momentumFactor;
-      }
+    const currentTime = new Date().getTime();
+    if (currentTime - lastSwipeTime <= momentumDuration) {
+      const timePassed = currentTime - lastSwipeTime;
+      const momentumFactor = 1 - (timePassed / momentumDuration);
+      player.x += playerMomentum * momentumFactor;
+    }
 
     // Collision detection with hills
     hills.forEach((hill, index) => {
@@ -276,12 +276,11 @@ const update = () => {
     if (player.x > hills[hills.length - 2].x) {
       generateHill();
     }
-    
-
 
     scrollX = player.x - canvas.width / 2;
   }
 };
+
     const gameLoop = () => {
       update();
       draw();
