@@ -100,9 +100,8 @@ const generateBgHill = () => {
   const correspondingGroundHill = hills.find(hill => hill.x === lastBgHill.x);
   
   let newY;
-  if (newY >= correspondingGroundHill.y) {
-        newY = correspondingGroundHill.y - 100; // 10 pixels above the ground line
-      }
+  if (correspondingGroundHill) {
+    newY = correspondingGroundHill.y - 100; // 10 pixels above the ground line
   } else {
     newY = lastBgHill.y + Math.floor(Math.random() * 151) - 60; // Random value between -60 and +90
     newY = Math.min(canvas.height - 400, Math.max(400, newY));
