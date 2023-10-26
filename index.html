@@ -79,9 +79,9 @@ const generateHill = () => {
   const lastHill = hills[hills.length - 1];
   const newHill = {
     // Generate the new hill further away from the player
-    x: lastHill.x + Math.floor(Math.random() * 400) + 300,
+    x: lastHill.x + Math.floor(Math.random() * 800) + 1000,
     // Generate the new hill closer to the middle of the screen
-    y: Math.min(canvas.height - 200, Math.max(200, lastHill.y + Math.floor(Math.random() * 200) - 100))
+    y: Math.min(canvas.height - 400, Math.max(400, lastHill.y + Math.floor(Math.random() * 200) - 100))
   };
   hills.push(newHill);
   generateAnimal(newHill);
@@ -91,7 +91,6 @@ const generateHill = () => {
     animalSpawnCounter = 0;
   }
 };
-
 
     const generateAnimal = (hill) => {
       const animalEmoji = allAnimals[Math.floor(Math.random() * allAnimals.length)];
