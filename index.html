@@ -201,7 +201,7 @@ const draw = () => {
     animals.forEach(animal => {
       ctx.font = animal.size === 'tiny' ? "50px Arial" : animal.size === 'small' ? "100px Arial" : animal.size === 'big' ? "200px Arial" : animal.size === 'huge' ? "300px Arial" : "450px Arial";
       ctx.fillText(animal.emoji, animal.x - scrollX, animal.y);
-    }
+    });  // Added the missing closing parenthesis and semicolon here
   }  
 };
 
