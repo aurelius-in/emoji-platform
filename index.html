@@ -94,11 +94,13 @@ const generateHill = () => {
   const generateBgHill = () => {
   const lastBgHill = bgHills[bgHills.length - 1];
   const correspondingGroundHill = hills.find(hill => hill.x === lastBgHill.x);
-  const newBgHill = {
-    x: lastBgHill.x + Math.floor(Math.random() * 800) + 1000,
-    y: Math.min(canvas.height - 400, Math.max(400, correspondingGroundHill.y - Math.floor(Math.random() * 190) - 10))
-  };
-  bgHills.push(newBgHill);
+  if (correspondingGroundHill) {
+    const newBgHill = {
+      x: lastBgHill.x + Math.floor(Math.random() * 800) + 1000,
+      y: Math.min(canvas.height - 400, Math.max(400, correspondingGroundHill.y - Math.floor(Math.random() * 190) - 10))
+    };
+    bgHills.push(newBgHill);
+  }
 };
 
     const generateAnimal = (hill) => {
