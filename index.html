@@ -64,6 +64,9 @@
         const deltaY = touchEndY - touchStartY;
         if (Math.abs(deltaX) > Math.abs(deltaY)) {
           if (deltaX > 0) {
+            playerMomentum = 50;
+            lastSwipeTime = new Date().getTime();
+          }
             player.x += 50;
           } else {
             player.x -= 50;
