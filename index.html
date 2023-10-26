@@ -21,7 +21,6 @@
     let touchStartX, touchStartY, touchEndX, touchEndY;
     let bgHills = [{x: 0, y: 960}, {x: 500, y: 960}];
     let bgEmojiList = ["🌳", "🌲", "🌴", "🌵", "🌾", "🌿", "🍀", "🍁", "🍂", "🍃"];
-    let lastBgEmojiSpawnTime = new Date().getTime();
     let bgEmojis = [];
     const tinyAnimals = ["🐞", "🐛", "🦗", "🐜", "🐌", "🦟", "🐀", "🐁", "🪰"];
     const smallAnimals = ["🐈", "🐒", "🐕", "🦂", "🦔", "🦨", "🐢", "🦆", "🦤", "🐦", "🐓", "🐈‍⬛", "🐩", "🦫", "🐿", "🦡", "🪿", "🐇"];
@@ -34,6 +33,10 @@
     let playerMomentum = 0;
     const momentumDuration = 1500; // 1.5 seconds in milliseconds
     let lastSwipeTime = 0;
+    // Initialize lastBgEmojiSpawnTime
+let lastBgEmojiSpawnTime = 0;
+// Initialize bgEmojis array
+let bgEmojis = [];
     
     // Event listeners for touchstart and touchend
     canvas.addEventListener("touchstart", function(e) {
