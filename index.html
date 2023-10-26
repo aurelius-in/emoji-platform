@@ -80,7 +80,7 @@ const generateHill = () => {
   const newHill = {
     x: lastHill.x + Math.floor(Math.random() * 800) + 1000,
     // Generate the new hill with more variation in y to maintain curviness
-    y: Math.min(canvas.height - 400, Math.max(400, lastHill.y + Math.floor(Math.random() * 400) - 200))
+    y: Math.min(canvas.height - 400, Math.max(400, lastHill.y + Math.floor(Math.random() * 800) - 400))
   };
   hills.push(newHill);
   generateAnimal(newHill);
