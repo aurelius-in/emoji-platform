@@ -120,6 +120,11 @@ const generateBgHill = () => {
     newY = upperLimit;
   }
 
+  
+      // Reset momentum if player is grounded
+      if (player.grounded) {
+        playerMomentum = 0;
+      }
   const newBgHill = {
     x: lastBgHill.x + Math.floor(Math.random() * 800) + 1000,
     y: newY
