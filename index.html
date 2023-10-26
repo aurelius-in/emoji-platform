@@ -133,7 +133,7 @@ const generateBgHill = () => {
   bgHills.push(newBgHill);
 };
 
-    const generateAnimal = (hill) => {
+const generateAnimal = (hill) => {
   const animalEmoji = allAnimals[Math.floor(Math.random() * allAnimals.length)];
   let animalSize = tinyAnimals.includes(animalEmoji) ? 'tiny' : smallAnimals.includes(animalEmoji) ? 'small' : bigAnimals.includes(animalEmoji) ? 'big' : 'huge';
   
@@ -141,15 +141,24 @@ const generateBgHill = () => {
     animalSize = 'tall';
   }
 
-  let newY = player.y + 10; // Default 10 pixels lower, adjust as needed
+  let lowerY = Math.min(player.y, hill.y);
+  let newY = lowerY + Math.floor(Math.random() * 151) + 50; // Random value between 50 and 200
   
-  // If the animal is tall, make it spawn even lower
-  if (animalSize === 'tall') {
-    newY = player.y + 50; // 50 pixels lower for tall animals, adjust as needed
-  }
+  // Check for minimum distance between animals
+  let minDistance = 100;
+  let maxDistance = 1000;
+  let validPosition = true;
+  animals.forEach(animal => {
+    let distance = Math.abs(animal.x - hill.x);
+    if (distance < minDistance || distance > maxDistance) {
+      validPosition = false;
+    }
+  });
 
-  const newAnimal = { emoji: animalEmoji, x: hill.x, y: newY, size: animalSize };
-  animals.push(newAnimal);
+  if (validPosition) {
+    const newAnimal = { emoji: animalEmoji, x: hill.x, y: newY, size: animalSize };
+    animals.push(newAnimal);
+  }
 };
  
 const draw = () => {
