@@ -148,25 +148,22 @@ const generateAnimal = (hill) => {
     newY += 50; // 50 pixels lower for tall animals
   }
 
-  // Check for minimum distance between animals
-  let minDistance = 500;
-  let maxDistance = 1000;
-  let validPosition = false;
-  animals.forEach(animal => {
-    let distance = Math.abs(animal.x - hill.x);
-    if (minDistance > distance) {
-      validPosition = true;
-    }
-  });
+// Check for minimum distance between animals
+let minDistance = 100;
+let validPosition = true;
 
-  if (validPosition) {
-    const newAnimal = { emoji: animalEmoji, x: hill.x, y: newY, size: animalSize };
-    animals.push(newAnimal);
+animals.forEach(animal => {
+  let distance = Math.abs(animal.x - hill.x);
+  if (distance < minDistance) {
     validPosition = false;
-    distance = 0;
   }
-};
- 
+});
+
+if (validPosition) {
+  const newAnimal = { emoji: animalEmoji, x: hill.x, y: newY, size: animalSize };
+  animals.push(newAnimal);
+}
+
 const draw = () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   if (gameState === 'selectCharacter') {
