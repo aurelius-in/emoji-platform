@@ -149,19 +149,21 @@ const generateAnimal = (hill) => {
   }
 
   // Check for minimum distance between animals
-  let minDistance = 100;
+  let minDistance = 500;
   let maxDistance = 1000;
-  let validPosition = true;
+  let validPosition = false;
   animals.forEach(animal => {
     let distance = Math.abs(animal.x - hill.x);
-    if (distance < minDistance || distance > maxDistance) {
-      validPosition = false;
+    if (minDistance > distance) {
+      validPosition = true;
     }
   });
 
   if (validPosition) {
     const newAnimal = { emoji: animalEmoji, x: hill.x, y: newY, size: animalSize };
     animals.push(newAnimal);
+    validPosition = false;
+    distance = 0;
   }
 };
  
