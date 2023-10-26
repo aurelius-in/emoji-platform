@@ -267,16 +267,15 @@ const update = () => {
       }
     });
 
-    // Generate background emojis
-  if (player.x - lastBgEmojiSpawnTime >= 900) {
-    const lastBgHill = bgHills[bgHills.length - 1];
-    const correspondingGroundHill = hills.find(hill => hill.x === lastBgHill.x);
-    const emojiSymbol = bgEmojiList[Math.floor(Math.random() * bgEmojiList.length)];
-    const newY = Math.floor(Math.random() * (correspondingGroundHill.y - lastBgHill.y) + lastBgHill.y);
-    bgEmojis.push({ symbol: emojiSymbol, x: lastBgHill.x, y: newY });
-    lastBgEmojiSpawnTime = player.x;
-  }
-
+    // Generate background emojis every 900 pixels
+      if (player.x - lastBgEmojiSpawnTime >= 900) {
+        const lastBgHill = bgHills[bgHills.length - 1];
+        const correspondingGroundHill = hills.find(hill => hill.x === lastBgHill.x);
+        const emojiSymbol = bgEmojiList[Math.floor(Math.random() * bgEmojiList.length)];
+        const newY = Math.floor(Math.random() * (correspondingGroundHill.y - lastBgHill.y) + lastBgHill.y);
+        bgEmojis.push({ symbol: emojiSymbol, x: lastBgHill.x, y: newY });
+        lastBgEmojiSpawnTime = player.x;
+      }
 
     if (player.x > bgHills[bgHills.length - 2].x) {
       generateBgHill();
