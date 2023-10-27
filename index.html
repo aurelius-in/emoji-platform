@@ -180,6 +180,12 @@ const draw = () => {
     // Restore the context to its original state
     ctx.restore();
   } else {
+    const draw = () => {
+  // Set the sky blue background
+  ctx.fillStyle = "skyblue";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+
       // Draw clouds
   clouds.forEach(cloud => {
     const originalAlpha = ctx.globalAlpha; // Store the original alpha value
