@@ -33,8 +33,9 @@
     let playerMomentum = 0;
     const momentumDuration = 1500; // 1.5 seconds in milliseconds
     let lastSwipeTime = 0;
-    // Initialize lastBgEmojiSpawnTime
-let lastBgEmojiSpawnTime = 0;
+    let lastBgEmojiSpawnTime = 0;
+    let lastBgEmojiSpawnTime = 0;
+
     
     // Event listeners for touchstart and touchend
     canvas.addEventListener("touchstart", function(e) {
@@ -83,6 +84,29 @@ canvas.addEventListener("touchend", function(e) {
   }
 });
 
+const generateAnimal = (hill) => {
+  const animalEmoji = allAnimals[Math.floor(Math.random() * allAnimals.length)];
+  let animalSize = tinyAnimals.includes(animalEmoji) ? 'tiny' : smallAnimals.includes(animalEmoji) ? 'small' : bigAnimals.includes(animalEmoji) ? 'big' : 'huge';
+  
+  if (tallAnimals.includes(animalEmoji)) {
+    animalSize = 'tall';
+  }
+
+  let lowerY = Math.min(player.y, hill.y);
+  let newY = lowerY + Math.floor(Math.random() * 151) + 50; // Random value between 50 and 200
+
+  // If the animal is tall, make it spawn even lower
+  if (animalSize === 'tall') {
+    newY += 50; // 50 pixels lower for tall animals
+  }
+
+  // Generate animal every 1000 pixels
+  if (hill.x % 1000 === 0) {
+    const newAnimal = { emoji: animalEmoji, x: hill.x, y: newY, size: animalSize };
+    animals.push(newAnimal);
+  }
+};
+    
 const generateHill = () => {
   const lastHill = hills[hills.length - 1];
   const newHill = {
@@ -116,29 +140,6 @@ const generateBgHill = () => {
   bgHills.push(newBgHill);
 };
     
-const generateAnimal = (hill) => {
-  const animalEmoji = allAnimals[Math.floor(Math.random() * allAnimals.length)];
-  let animalSize = tinyAnimals.includes(animalEmoji) ? 'tiny' : smallAnimals.includes(animalEmoji) ? 'small' : bigAnimals.includes(animalEmoji) ? 'big' : 'huge';
-  
-  if (tallAnimals.includes(animalEmoji)) {
-    animalSize = 'tall';
-  }
-
-  let lowerY = Math.min(player.y, hill.y);
-  let newY = lowerY + Math.floor(Math.random() * 151) + 50; // Random value between 50 and 200
-
-  // If the animal is tall, make it spawn even lower
-  if (animalSize === 'tall') {
-    newY += 50; // 50 pixels lower for tall animals
-  }
-
-  // Generate animal every 1000 pixels
-  if (hill.x % 1000 === 0) {
-    const newAnimal = { emoji: animalEmoji, x: hill.x, y: newY, size: animalSize };
-    animals.push(newAnimal);
-  }
-};
-
 const draw = () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   if (gameState === 'selectCharacter') {
