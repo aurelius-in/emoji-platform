@@ -86,23 +86,21 @@ canvas.addEventListener("touchend", function(e) {
 
 const generateCloud = () => {
   const cloudEmoji = "☁️";
-  const opacity = Math.random() * 0.45 + 0.5; // Random opacity between 0.5 and 0.95
-  const sizeFactor = Math.random() * 1.5 + 0.5; // Random size factor between 0.5 and 2
-  const baseSize = 200; // Base size of the cloud
-  const finalSize = baseSize * sizeFactor; // Final size including the random factor
-  const y = Math.floor(Math.random() * 201) + 50; // Random y-coordinate between 50 and 250
-  const x = clouds.length === 0 ? 0 : clouds[clouds.length - 1].x + Math.floor(Math.random() * 901) + 100; // Random x-coordinate between 100 and 1000px from the last cloud
-  
+  const opacity = Math.random() * 0.45 + 0.5;
+  const sizeFactor = Math.random() * 1.5 + 0.5;
+  const baseSize = 200;
+  const finalSize = baseSize * sizeFactor;
+  const y = Math.floor(Math.random() * 201) + 50;
+  const x = player.x + canvas.width; // Spawn just outside the right edge of the screen
   clouds.push({ emoji: cloudEmoji, opacity, size: finalSize, x, y });
 };
-    
-// Generate Far Background Mountains 
+
 const generateFarBgMountain = () => {
   const mountainEmoji = ["🗻", "🏔",  "⛰️", "⛰️", "⛰️"][Math.floor(Math.random() * 3)];
-  const opacity = Math.random() * 0.1 + 0.8; // Random opacity between 0.8 and 0.9
-  const size = Math.floor(Math.random() * 5000) + 1000; // Random size between 2000 and 6000
-  const aspectRatio = Math.random() * 3 + 1; // Random aspect ratio between 1:1 and 4:1
-  const x = farBgMountains.length === 0 ? 0 : farBgMountains[farBgMountains.length - 1].x + Math.floor(Math.random() * 5000) + 100; // Random distance between 100 and 5000 pixels apart
+  const opacity = Math.random() * 0.1 + 0.8;
+  const size = Math.floor(Math.random() * 5000) + 1000;
+  const aspectRatio = Math.random() * 3 + 1;
+  const x = player.x + canvas.width; // Spawn just outside the right edge of the screen
   farBgMountains.push({emoji: mountainEmoji, opacity, size, aspectRatio, x});
 };
 
