@@ -105,28 +105,18 @@ const generateFarBgMountain = () => {
   farBgMountains.push({emoji: mountainEmoji, opacity, size, aspectRatio, x});
 };
 
-const generateAnimal = (hill) => {
-  const animalEmoji = allAnimals[Math.floor(Math.random() * allAnimals.length)];
-  let animalSize = tinyAnimals.includes(animalEmoji) ? 'tiny' : smallAnimals.includes(animalEmoji) ? 'small' : bigAnimals.includes(animalEmoji) ? 'big' : 'huge';
-  
-  if (tallAnimals.includes(animalEmoji)) {
-    animalSize = 'tall';
-  }
-
-  let lowerY = Math.min(player.y, hill.y);
-  let newY = lowerY + Math.floor(Math.random() * 151) + 50; // Random value between 50 and 200
-
-  // If the animal is tall, make it spawn even lower
-  if (animalSize === 'tall') {
-    newY += 50; // 50 pixels lower for tall animals
-  }
-
-  // Generate animal every 1000 pixels
-  if (hill.x % 1000 === 0) {
-    const newAnimal = { emoji: animalEmoji, x: hill.x, y: newY, size: animalSize };
-    animals.push(newAnimal);
-  }
-};
+const generateAnimal = () => {
+      const animalEmoji = allAnimals[Math.floor(Math.random() * allAnimals.length)];
+      let animalSize = tinyAnimals.includes(animalEmoji) ? 'tiny' : smallAnimals.includes(animalEmoji) ? 'small' : bigAnimals.includes(animalEmoji) ? 'big' : 'huge';
+      if (tallAnimals.includes(animalEmoji)) {
+        animalSize = 'tall';
+      }
+      const randomX = player.x + Math.floor(Math.random() * 401) + 100;
+      const randomYOffset = animalSize === 'tall' ? Math.floor(Math.random() * 46) + 75 : Math.floor(Math.random() * 51) + 50;
+      const newY = player.y + randomYOffset;
+      const newAnimal = { emoji: animalEmoji, x: randomX, y: newY, size: animalSize };
+      animals.push(newAnimal);
+    };
     
 const generateHill = () => {
   const lastHill = hills[hills.length - 1];
