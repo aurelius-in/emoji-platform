@@ -85,15 +85,15 @@ canvas.addEventListener("touchend", function(e) {
 });
 
 // Function to generate a new cloud
-const generateCloud = () => {
-  const cloudEmoji = "☁️";
-  const opacity = Math.random() * 0.45 + 0.5; // Random opacity between 0.5 and 0.95
-  const size = Math.floor(Math.random() * 301) + 200; // Random size between 200 and 500px
-  const y = Math.floor(Math.random() * 151) - 50; // Random y-coordinate between -50 and 100
-  const x = clouds.length === 0 ? 0 : clouds[clouds.length - 1].x + Math.floor(Math.random() * 901) + 100; // Random x-coordinate between 100 and 1000px from the last cloud
-  
-  clouds.push({ emoji: cloudEmoji, opacity, size, x, y });
-};
+    const generateCloud = () => {
+      const cloudEmoji = "☁️";
+      const opacity = Math.random() * 0.45 + 0.5; // Random opacity between 0.5 and 0.95
+      const size = Math.floor(Math.random() * 301) + 200; // Random size between 200 and 500px
+      const y = Math.floor(Math.random() * 151) - 50; // Random y-coordinate between -50 and 100
+      const x = clouds.length === 0 ? 0 : clouds[clouds.length - 1].x + Math.floor(Math.random() * 901) + 100; // Random x-coordinate between 100 and 1000px from the last cloud
+      
+      clouds.push({ emoji: cloudEmoji, opacity, size, x, y });
+    };
     
 // Generate Far Background Mountains 
 const generateFarBgMountain = () => {
@@ -185,13 +185,14 @@ const draw = () => {
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       // Draw clouds
-  clouds.forEach(cloud => {
-    const originalAlpha = ctx.globalAlpha; // Store the original alpha value
-    ctx.globalAlpha = cloud.opacity; // Set the new alpha value for the cloud
-    ctx.font = `${cloud.size}px Arial`;
-    ctx.fillText(cloud.emoji, cloud.x - scrollX, cloud.y);
-    ctx.globalAlpha = originalAlpha; // Reset the alpha value back to its original state
-  });
+      clouds.forEach(cloud => {
+        const originalAlpha = ctx.globalAlpha; // Store the original alpha value
+        ctx.globalAlpha = cloud.opacity; // Set the new alpha value for the cloud
+        ctx.font = `${cloud.size}px Arial`;
+        ctx.fillText(cloud.emoji, cloud.x - scrollX, cloud.y);
+        ctx.globalAlpha = originalAlpha; // Reset the alpha value back to its original state
+      });
+
   // Draw far background mountains
   farBgMountains.forEach(mountain => {
     const originalAlpha = ctx.globalAlpha; // Store the original alpha value
@@ -268,7 +269,12 @@ const update = () => {
 
     let prevHill = hills[0];
     let slope = 0;
-
+    
+    // Generate clouds
+      if (clouds.length === 0 || player.x - clouds[clouds.length - 1].x > 1000) {
+        generateCloud();
+      }
+  
     // Generate far background mountains
   if (farBgMountains.length === 0 || player.x - farBgMountains[farBgMountains.length - 1].x > 10000) {
     generateFarBgMountain();
@@ -343,6 +349,7 @@ const update = () => {
       generateHill();
       generateBgHill();
       generateFarBgMountain();
+      generateCloud(); // Initialize clouds
     }
     
     const gameLoop = () => {
