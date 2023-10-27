@@ -84,10 +84,10 @@ canvas.addEventListener("touchend", function(e) {
 });
 // Generate Far Background Mountains 
 const generateFarBgMountain = () => {
-  const mountainEmoji = ["🗻", "🏔", "⛰️", "⛰️" ][Math.floor(Math.random() * 3)];
+  const mountainEmoji = ["🗻", "🏔",  "⛰️", "⛰️", "⛰️"][Math.floor(Math.random() * 3)];
   const opacity = Math.random() * 0.1 + 0.8; // Random opacity between 0.8 and 0.9
   const size = Math.floor(Math.random() * 5000) + 1000; // Random size between 2000 and 6000
-  const aspectRatio = Math.random() * 4 + 1; // Random aspect ratio between 1:1 and 5:1
+  const aspectRatio = Math.random() * 3 + 1; // Random aspect ratio between 1:1 and 4:1
   const x = farBgMountains.length === 0 ? 0 : farBgMountains[farBgMountains.length - 1].x + Math.floor(Math.random() * 5000) + 100; // Random distance between 100 and 5000 pixels apart
   farBgMountains.push({emoji: mountainEmoji, opacity, size, aspectRatio, x});
 };
@@ -167,18 +167,20 @@ const draw = () => {
     // Restore the context to its original state
     ctx.restore();
   } else {
-    // Draw far background mountains
-    farBgMountains.forEach(mountain => {
+  // Draw far background mountains
+  farBgMountains.forEach(mountain => {
     const originalAlpha = ctx.globalAlpha; // Store the original alpha value
     ctx.globalAlpha = mountain.opacity; // Set the new alpha value for the mountain
-    ctx.font = `${mountain.size}px Arial`;
+    const adjustedSize = mountain.size * 0.8; // Make the mountain 20% smaller
+    ctx.font = `${adjustedSize}px Arial`;
     ctx.save();
     ctx.scale(mountain.aspectRatio, 1);
-    ctx.fillText(mountain.emoji, (mountain.x - scrollX) / mountain.aspectRatio, mountain.size - 200); // 200px higher
+    ctx.fillText(mountain.emoji, (mountain.x - scrollX) / mountain.aspectRatio, adjustedSize - 300); // 300px higher (200 + 100)
     ctx.restore();
     ctx.globalAlpha = originalAlpha; // Reset the alpha value back to its original state
   });
-    // Draw background hills
+
+// Draw background hills
 ctx.beginPath();
 ctx.moveTo(bgHills[0].x - scrollX, bgHills[0].y);
 bgHills.forEach((hill, index) => {
