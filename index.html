@@ -34,6 +34,7 @@
     const momentumDuration = 1500; // 1.5 seconds in milliseconds
     let lastSwipeTime = 0;
     let lastBgEmojiSpawnTime = 0;
+    let farBgMountains = [];
     
     // Event listeners for touchstart and touchend
     canvas.addEventListener("touchstart", function(e) {
@@ -81,6 +82,16 @@ canvas.addEventListener("touchend", function(e) {
     }
   }
 });
+
+// Add this function to generate far background mountains
+const generateFarBgMountain = () => {
+  const mountainEmoji = ["🗻", "🏔", "⛰️"][Math.floor(Math.random() * 3)];
+  const opacity = Math.random() * 0.4 + 0.5; // Random opacity between 0.5 and 0.9
+  const size = Math.floor(Math.random() * 9000) + 1000; // Random size between 1000 and 10000
+  const aspectRatio = Math.random() * 5 + 1; // Random aspect ratio between 1:1 and 6:1
+  const x = farBgMountains.length === 0 ? 0 : farBgMountains[farBgMountains.length - 1].x + Math.floor(Math.random() * 9900) + 100; // Random distance between 100 and 10000 pixels apart
+  farBgMountains.push({emoji: mountainEmoji, opacity, size, aspectRatio, x});
+};
 
 const generateAnimal = (hill) => {
   const animalEmoji = allAnimals[Math.floor(Math.random() * allAnimals.length)];
@@ -157,7 +168,16 @@ const draw = () => {
     // Restore the context to its original state
     ctx.restore();
   } else {
-    
+    // Draw far background mountains
+  ctx.globalAlpha = 1; // Reset to default
+  farBgMountains.forEach(mountain => {
+    ctx.globalAlpha = mountain.opacity;
+    ctx.font = `${mountain.size}px Arial`;
+    ctx.save();
+    ctx.scale(mountain.aspectRatio, 1);
+    ctx.fillText(mountain.emoji, (mountain.x - scrollX) / mountain.aspectRatio, mountain.size);
+    ctx.restore();
+  });
     // Draw background hills
 ctx.beginPath();
 ctx.moveTo(bgHills[0].x - scrollX, bgHills[0].y);
@@ -222,6 +242,10 @@ const update = () => {
     let prevHill = hills[0];
     let slope = 0;
 
+    // Generate far background mountains
+  if (farBgMountains.length === 0 || player.x - farBgMountains[farBgMountains.length - 1].x > 10000) {
+    generateFarBgMountain();
+  }
     // Apply momentum
     const currentTime = new Date().getTime();
     if (currentTime - lastSwipeTime <= momentumDuration) {
@@ -291,8 +315,9 @@ const update = () => {
     for (let i = 0; i < 5; i++) {
       generateHill();
       generateBgHill();
+      generateFarBgMountain();
     }
-
+    
     const gameLoop = () => {
   update();
   draw();
