@@ -228,7 +228,7 @@ const update = () => {
     player.vy += player.gravity;
     player.grounded = false;
 
-    let prevHill = null;
+    let prevHill = hills[0];
     let slope = 0;
 
     // Apply momentum
@@ -240,28 +240,27 @@ const update = () => {
     }
 
     // Collision detection with hills
-    hills.forEach((hill, index) => {
-      if (index > 0) {
-        prevHill = hills[index - 1];
-        slope = (hill.y - prevHill.y) / (hill.x - prevHill.x);
-        if (player.x >= prevHill.x && player.x <= hill.x) {
-          const expectedY = slope * (player.x - prevHill.x) + prevHill.y;
-          if (player.y >= expectedY) {
-            player.y = expectedY;
-            player.vy = 0;
-            player.grounded = true;
-            player.jumping = false;
+    for (let index = 1; index < hills.length; index++) {
+      const hill = hills[index];
+      slope = (hill.y - prevHill.y) / (hill.x - prevHill.x);
+      if (player.x >= prevHill.x && player.x <= hill.x) {
+        const expectedY = slope * (player.x - prevHill.x) + prevHill.y;
+        if (player.y >= expectedY) {
+          player.y = expectedY;
+          player.vy = 0;
+          player.grounded = true;
+          player.jumping = false;
 
-            // Apply enhanced gravity based on slope
-            if (slope > 0) {
-              player.x += slope * 8;  // Increased multiplier for more gravity
-            } else {
-              player.x += slope * 4;  // Some momentum to go up the hill
-            }
+          // Apply enhanced gravity based on slope
+          if (slope > 0) {
+            player.x += slope * 8;
+          } else {
+            player.x += slope * 4;
           }
         }
       }
-    });
+      prevHill = hill;
+    }
 
     // Generate background emojis every 900 pixels
     if (player.x - lastBgEmojiSpawnTime >= 900) {
