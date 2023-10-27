@@ -84,16 +84,18 @@ canvas.addEventListener("touchend", function(e) {
   }
 });
 
-// Function to generate a new cloud
-    const generateCloud = () => {
-      const cloudEmoji = "☁️";
-      const opacity = Math.random() * 0.45 + 0.5; // Random opacity between 0.5 and 0.95
-      const size = Math.floor(Math.random() * 301) + 200; // Random size between 200 and 500px
-      const y = Math.floor(Math.random() * 151) - 50; // Random y-coordinate between -50 and 100
-      const x = clouds.length === 0 ? 0 : clouds[clouds.length - 1].x + Math.floor(Math.random() * 901) + 100; // Random x-coordinate between 100 and 1000px from the last cloud
-      
-      clouds.push({ emoji: cloudEmoji, opacity, size, x, y });
-    };
+const generateCloud = () => {
+  const cloudEmoji = "☁️";
+  const opacity = Math.random() * 0.45 + 0.5; // Random opacity between 0.5 and 0.95
+  const size = Math.floor(Math.random() * 101) + 50; // Random size variation between 50 and 100 pixels
+  const baseSize = 200; // Base size of the cloud
+  const finalSize = baseSize + size; // Final size including the random variation
+  const y = Math.floor(Math.random() * 51) + 50; // Random y-coordinate between 50 and 100
+  const x = clouds.length === 0 ? 0 : clouds[clouds.length - 1].x + Math.floor(Math.random() * 901) + 100; // Random x-coordinate between 100 and 1000px from the last cloud
+  
+  clouds.push({ emoji: cloudEmoji, opacity, size: finalSize, x, y });
+};
+
     
 // Generate Far Background Mountains 
 const generateFarBgMountain = () => {
