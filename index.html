@@ -87,15 +87,14 @@ canvas.addEventListener("touchend", function(e) {
 const generateCloud = () => {
   const cloudEmoji = "☁️";
   const opacity = Math.random() * 0.45 + 0.5; // Random opacity between 0.5 and 0.95
-  const size = Math.floor(Math.random() * 101) + 50; // Random size variation between 50 and 100 pixels
+  const sizeFactor = Math.random() * 1.5 + 0.5; // Random size factor between 0.5 and 2
   const baseSize = 200; // Base size of the cloud
-  const finalSize = baseSize + size; // Final size including the random variation
-  const y = Math.floor(Math.random() * 51) + 50; // Random y-coordinate between 50 and 100
+  const finalSize = baseSize * sizeFactor; // Final size including the random factor
+  const y = Math.floor(Math.random() * 201) + 50; // Random y-coordinate between 50 and 250
   const x = clouds.length === 0 ? 0 : clouds[clouds.length - 1].x + Math.floor(Math.random() * 901) + 100; // Random x-coordinate between 100 and 1000px from the last cloud
   
   clouds.push({ emoji: cloudEmoji, opacity, size: finalSize, x, y });
 };
-
     
 // Generate Far Background Mountains 
 const generateFarBgMountain = () => {
