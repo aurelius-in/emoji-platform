@@ -290,6 +290,13 @@ const update = () => {
       requestAnimationFrame(gameLoop);
     };
 
+    
+    // Initialize hills and background hills
+    for (let i = 0; i < 5; i++) {
+      generateHill();
+      generateBgHill();
+    }
+    
     gameLoop();
   </script>
 </body>
