@@ -292,6 +292,12 @@ const update = () => {
       generateHill();
       generateBgHill();
     }
+
+    const gameLoop = () => {
+  update();
+  draw();
+  requestAnimationFrame(gameLoop);
+};
     
     gameLoop();
   </script>
