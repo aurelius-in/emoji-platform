@@ -231,10 +231,12 @@ const update = () => {
     }
 
     // Collision detection with hills
+    let hillFound = false;
     for (let index = 1; index < hills.length; index++) {
       const hill = hills[index];
       slope = (hill.y - prevHill.y) / (hill.x - prevHill.x);
       if (player.x >= prevHill.x && player.x <= hill.x) {
+        hillFound = true;
         const expectedY = slope * (player.x - prevHill.x) + prevHill.y;
         if (player.y >= expectedY) {
           player.y = expectedY;
@@ -253,14 +255,26 @@ const update = () => {
       prevHill = hill;
     }
 
-    // Generate background emojis every 900 pixels
-    if (player.x - lastBgEmojiSpawnTime >= 900) {
+    if (!hillFound) {
+      player.x = hills[hills.length - 1].x;
+    }
+
+    // Animal Generation
+    if (animals.length === 0 || player.x - animals[animals.length - 1].x > 1000) {
+      generateAnimal(hills[hills.length - 1]);
+    }
+
+    // Background Emoji Generation
+    if (bgEmojis.length === 0 || player.x - bgEmojis[bgEmojis.length - 1].x > 900) {
       const lastBgHill = bgHills[bgHills.length - 1];
-      const correspondingGroundHill = hills.find(hill => hill.x === lastBgHill.x);
       const emojiSymbol = bgEmojiList[Math.floor(Math.random() * bgEmojiList.length)];
-      const newY = Math.floor(Math.random() * (correspondingGroundHill.y - lastBgHill.y) + lastBgHill.y);
+      const newY = Math.floor(Math.random() * (hills[hills.length - 1].y - lastBgHill.y) + lastBgHill.y);
       bgEmojis.push({ symbol: emojiSymbol, x: lastBgHill.x, y: newY });
-      lastBgEmojiSpawnTime = player.x;
+    }
+
+    // Momentum
+    if (currentTime - lastSwipeTime > momentumDuration) {
+      playerMomentum = 0;
     }
 
     if (player.x > bgHills[bgHills.length - 2].x) {
@@ -273,14 +287,6 @@ const update = () => {
     scrollX = player.x - canvas.width / 2;
   }
 };
-
-    const gameLoop = () => {
-      update();
-      draw();
-      requestAnimationFrame(gameLoop);
-    };
-
-    
     // Initialize hills and background hills
     for (let i = 0; i < 5; i++) {
       generateHill();
