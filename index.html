@@ -107,17 +107,17 @@ const generateFarBgMountain = () => {
 };
 
 const generateAnimal = () => {
-      const animalEmoji = allAnimals[Math.floor(Math.random() * allAnimals.length)];
-      let animalSize = tinyAnimals.includes(animalEmoji) ? 'tiny' : smallAnimals.includes(animalEmoji) ? 'small' : bigAnimals.includes(animalEmoji) ? 'big' : 'huge';
-      if (tallAnimals.includes(animalEmoji)) {
-        animalSize = 'tall';
-      }
-      const randomX = player.x + Math.floor(Math.random() * 401) + 100;
-      const randomYOffset = animalSize === 'tall' ? Math.floor(Math.random() * 46) + 75 : Math.floor(Math.random() * 51) + 50;
-      const newY = player.y + randomYOffset;
-      const newAnimal = { emoji: animalEmoji, x: randomX, y: newY, size: animalSize };
-      animals.push(newAnimal);
-    };
+  const animalEmoji = allAnimals[Math.floor(Math.random() * allAnimals.length)];
+  let animalSize = tinyAnimals.includes(animalEmoji) ? 'tiny' : smallAnimals.includes(animalEmoji) ? 'small' : bigAnimals.includes(animalEmoji) ? 'big' : 'huge';
+  if (tallAnimals.includes(animalEmoji)) {
+    animalSize = 'tall';
+  }
+  const randomX = player.x + canvas.width; // Spawn just outside the right edge of the screen
+  const randomYOffset = animalSize === 'tall' ? Math.floor(Math.random() * 46) + 75 : Math.floor(Math.random() * 51) + 50;
+  const newY = player.y + randomYOffset;
+  const newAnimal = { emoji: animalEmoji, x: randomX, y: newY, size: animalSize };
+  animals.push(newAnimal);
+};
     
 const generateHill = () => {
   const lastHill = hills[hills.length - 1];
