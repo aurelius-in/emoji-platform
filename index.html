@@ -307,10 +307,10 @@ const update = () => {
     }
 
     // Animal Generation
-    if (animals.length === 0 || player.x - animals[animals.length - 1].x > 1000) {
-      generateAnimal(hills[hills.length - 1]);
-    }
-
+      if (animals.length === 0 || player.x - animals[animals.length - 1].x > Math.floor(Math.random() * 401) + 100) {
+        generateAnimal();
+      }
+    
     // Background Emoji Generation
     if (bgEmojis.length === 0 || player.x - bgEmojis[bgEmojis.length - 1].x > 900) {
       const lastBgHill = bgHills[bgHills.length - 1];
